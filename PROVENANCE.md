@@ -41,3 +41,23 @@
 - 仓库：`hhw1998-ai/chengtou-mindmap`（公开，用于 GitHub Pages 免费托管）
 - 线上地址：<https://hhw1998-ai.github.io/chengtou-mindmap/>
 - 内容：上述源码快照（6 个原始文件）+ `README.md` + `docs/screenshot.png`（线上界面截图）
+
+## 2026-10-19 多人协作改造（在 GitHub 仓库内进行）
+
+在保留原单页应用的基础上，新增 Supabase 云端协作层（未改动原渲染主逻辑）：
+
+- 新增文件：
+  - `js/cloud-sync.js`：身份、云端读写、实时订阅、在线人数、旧数据迁移、UI 增量覆盖
+  - `js/mm-config.js`：Supabase 项目 URL 与 anon public key（公开信息）
+  - `vendor/supabase.js`：supabase-js v2 UMD 包（自托管）
+  - `styles/sync.css`：新增 UI 样式
+  - `supabase/schema.sql`：建表 / 索引 / 触发器 / RLS / Realtime 配置
+- 修改文件：`index.html`（引入 SDK、配置、同步层与样式）、`README.md`、`AGENTS.md`、`docs/screenshot.png`
+- 后端：Supabase 项目 `chengtou-mindmap`
+  - ref：`pbxxiyqvypcdffdcsaoa`
+  - 区域：`ap-southeast-1`（免费版）
+  - 表：`mm_members`、`mm_annotations`、`mm_highlights`、`mm_pages`
+  - 认证：启用 Anonymous sign-ins；匿名登录限流调至 600/小时
+  - 权限：RLS —— 所有人可读，只能增删改自己名下的记录
+  - 实时：三张数据表加入 `supabase_realtime` 发布，`replica identity full`
+- 数据迁移：首次登录时若本机 localStorage 存在旧标注，弹窗确认后上传并归属到当前用户。
