@@ -38,7 +38,7 @@
  ├─ index.html            原有单页应用（渲染 / 交互 / 本地缓存）
  ├─ js/cloud-sync.js      多人同步层（身份、云端读写、实时订阅、UI 增量）
  ├─ js/mm-config.js       Supabase 项目配置（URL + anon key，公开信息）
- └─ vendor/supabase.js    supabase-js v2 SDK（自托管，避免 CDN 不稳）
+ └─ lib/supabase.js       supabase-js v2 SDK（自托管，避免 CDN 不稳）
 
 Supabase（免费版）
  ├─ Auth        匿名登录（免注册），uid 即用户 ID
