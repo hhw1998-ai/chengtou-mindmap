@@ -1,0 +1,4253 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>城投向产投转型：研究前思维导图</title>
+<style>
+*{box-sizing:border-box;}
+:root{
+  --bg:#FFFFFF; --bg2:#F6F7F9; --bg3:#EDEFF3;
+  --ink:#1A1D23; --ink2:#4A5158; --ink3:#8A929B;
+  --line:#DCE1E7; --line2:#EAEDF1;
+}
+html,body{height:100%;margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color:var(--ink);background:var(--bg);overflow:hidden;font-size:14px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:264px 1fr;height:100vh;}
+.side{
+  background:var(--bg2);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.main{display:flex;flex-direction:column;overflow:hidden;position:relative;background:var(--bg);}
+.body{position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
+
+/* ---------- sidebar ---------- */
+.brand{padding:16px 16px 12px;border-bottom:1px solid var(--line2);}
+.brand h1{margin:0;font-size:15px;font-weight:700;letter-spacing:.01em;}
+.brand p{margin:6px 0 0;font-size:11.5px;color:var(--ink3);line-height:1.5;}
+.sidebox{padding:12px 16px;border-bottom:1px solid var(--line2);}
+.sidebox h2{
+  margin:0 0 8px;font-size:10.5px;font-weight:700;color:var(--ink3);
+  letter-spacing:.09em;text-transform:uppercase;
+}
+.search{position:relative;}
+.search input{
+  width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:6px;
+  font-size:12.5px;background:#fff;color:var(--ink);outline:none;font-family:inherit;
+}
+.search input:focus{border-color:#9AA6B4;box-shadow:0 0 0 3px rgba(90,110,140,.08);}
+.search .hint{font-size:10.5px;color:var(--ink3);margin-top:6px;}
+.navlist{overflow-y:auto;flex:1;padding:10px 10px 16px;}
+.navlist a{
+  display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;
+  font-size:12.5px;color:var(--ink2);text-decoration:none;cursor:pointer;line-height:1.35;
+}
+.navlist a:hover{background:#fff;color:var(--ink);}
+.navlist a .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+.navlist a .cd{font-size:10px;color:var(--ink3);font-weight:700;width:16px;flex:none;font-variant-numeric:tabular-nums;}
+.navlist a .cnt{margin-left:auto;font-size:10px;color:var(--ink3);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{
+  font-size:11px;padding:3px 8px;border-radius:20px;border:1px solid var(--line);
+  background:#fff;color:var(--ink2);cursor:pointer;user-select:none;transition:.12s;
+}
+.chip:hover{border-color:#B9C2CC;}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--ink2);}
+.legend div{display:flex;align-items:center;gap:8px;}
+.legend i{width:10px;height:10px;border-radius:3px;flex:none;display:block;}
+
+/* ---------- topbar ---------- */
+.top{
+  display:flex;align-items:center;gap:10px;padding:10px 16px;
+  border-bottom:1px solid var(--line2);background:#fff;flex:none;z-index:5;
+  flex-wrap:wrap;row-gap:7px;
+}
+.tabs{display:flex;gap:2px;background:var(--bg3);padding:3px;border-radius:8px;flex:none;}
+.tabs button{
+  border:0;background:transparent;padding:5px 12px;border-radius:6px;cursor:pointer;
+  font-size:12.5px;color:var(--ink2);font-family:inherit;font-weight:600;white-space:nowrap;
+}
+.tabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.10);}
+.spacer{flex:1;min-width:0;}
+.btn{
+  border:1px solid var(--line);background:#fff;padding:5px 10px;border-radius:6px;
+  font-size:12px;color:var(--ink2);cursor:pointer;font-family:inherit;white-space:nowrap;flex:none;
+}
+.btn:hover{border-color:#B9C2CC;color:var(--ink);}
+.stat{font-size:11.5px;color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.stat b{color:var(--ink);font-weight:700;}
+@media (max-width:1620px){ .stat{display:none;} }
+
+/* ---------- map ---------- */
+.mapwrap{flex:1;overflow:auto;position:relative;transition:padding-right .22s cubic-bezier(.4,0,.2,1);background:
+  radial-gradient(circle at 1px 1px, #E7EAEF 1px, transparent 0) 0 0/22px 22px, var(--bg);}
+.main.drawer-open .mapwrap{padding-right:400px;}
+/* 缩放用 transform + 尺寸代理：布局尺寸不受缩放影响，滚动坐标始终是标准像素，锚点才准 */
+.mapscale{position:relative;display:block;}
+.map{padding:16px 60px 28px 40px;position:absolute;left:0;top:0;transform-origin:0 0;}
+ul.tree,ul.tree ul{list-style:none;margin:0;padding:0;}
+ul.tree ul.children{padding-left:32px;}
+ul.tree li{display:flex;align-items:center;}
+ul.tree li > .node{flex:none;}
+ul.children{
+  display:flex;flex-direction:column;justify-content:center;position:relative;
+}
+ul.children::before{
+  content:'';position:absolute;left:16px;top:0;bottom:0;width:1px;background:#C6CFD8;
+}
+ul.children > li{position:relative;padding:2px 0;}
+ul.children > li::before{
+  content:'';position:absolute;left:-16px;top:50%;width:16px;height:1px;background:#C6CFD8;
+}
+ul.children > li:first-child::after{
+  content:'';position:absolute;left:-16.5px;top:-2px;height:calc(50% + 2px);width:2px;background:var(--bg);
+}
+ul.children > li:last-child::after{
+  content:'';position:absolute;left:-16.5px;bottom:-2px;height:calc(50% + 2px);width:2px;background:var(--bg);
+}
+li.collapsed > ul.children{display:none;}
+
+/* ---------- node ---------- */
+.node{
+  display:flex;align-items:flex-start;gap:8px;border-radius:9px;
+  border:1px solid var(--line);background:#fff;padding:8px 10px;
+  cursor:pointer;transition:box-shadow .14s,border-color .14s;
+}
+.node:hover{box-shadow:0 3px 10px rgba(16,24,40,.10);border-color:#BFC7D1;}
+.node .nb{flex:1;min-width:0;}
+.nt{display:flex;align-items:flex-start;gap:6px;}
+.tt{flex:1;line-height:1.42;font-weight:600;}
+.nn{margin-top:4px;font-size:11px;line-height:1.5;color:var(--ink3);}
+.tags{display:flex;gap:3px;flex:none;padding-top:1px;}
+.tag{font-size:9.5px;padding:1px 5px;border-radius:4px;font-weight:700;letter-spacing:.02em;white-space:nowrap;}
+.t-L1{background:#E7EDF6;color:#42556F;}
+.t-L2{background:#E2F1EA;color:#2B6A52;}
+.t-L3{background:#FCEADC;color:#9E5511;}
+.t-L4{background:#EFE6F8;color:#684491;}
+.t-K{background:#FBE4E4;color:#AC2128;}
+.t-C{background:rgba(255,255,255,.24);color:#fff;font-weight:600;}
+.tgl{
+  flex:none;width:17px;height:17px;border-radius:50%;border:1px solid var(--line);
+  background:#fff;color:var(--ink3);font-size:12px;line-height:14px;text-align:center;
+  cursor:pointer;padding:0;font-family:inherit;margin-top:1px;
+}
+.tgl:hover{background:var(--bg3);color:var(--ink);}
+
+.node.lv0{background:var(--c);border-color:transparent;color:#fff;width:206px;}
+.node.lv0 .nn{color:rgba(255,255,255,.72);}
+.node.lv0 .tt{font-size:14px;}
+.node.lv1{background:var(--c);border-color:transparent;color:#fff;width:196px;}
+.node.lv1 .nn{color:rgba(255,255,255,.78);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.node.lv1 .tt{font-size:13px;}
+.node.lv1 .tgl{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.14);color:#fff;}
+.node.lv1:hover{box-shadow:0 4px 14px rgba(16,24,40,.18);}
+.node.lv2{width:212px;border-left:3px solid var(--c);}
+.node.lv2 .tt{font-size:12.8px;}
+.node.lv3{width:238px;border-left:3px dashed var(--c);background:#FCFDFE;}
+.node.lv3 .tt{font-size:12.5px;font-weight:500;}
+.node.lv3 .nn{font-size:10.8px;}
+.node.lv4{
+  width:252px;border:0;background:var(--bg2);border-left:3px solid var(--line);
+  border-radius:7px;padding:7px 10px;
+}
+.node.lv4 .tt{font-size:12px;font-weight:500;color:var(--ink2);}
+.node.lv4 .nn{font-size:10.6px;}
+.node.lv4 .tgl{margin-top:0;}
+
+.mark{display:inline-block;width:6px;height:6px;border-radius:50%;background:#C0392B;margin-left:2px;vertical-align:middle;}
+.node.hit{box-shadow:0 0 0 2px #F0A92E, 0 3px 10px rgba(16,24,40,.12);}
+.node.dim{opacity:.26;}
+
+/* ---------- plan view ---------- */
+#viewPlan{display:none;flex:1;overflow:auto;padding:26px 34px 80px;background:var(--bg2);}
+#viewPlan.on{display:block;}
+#viewTree.off{display:none;}
+.planh{margin:0 0 6px;font-size:19px;font-weight:700;}
+.plans{margin:0 0 22px;font-size:12.5px;color:var(--ink3);line-height:1.7;}
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;}
+.ph{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+.ph > header{padding:12px 14px;color:#fff;}
+.ph > header h3{margin:0;font-size:14px;font-weight:700;}
+.ph > header p{margin:4px 0 0;font-size:11px;opacity:.85;line-height:1.5;}
+.ph .body{padding:10px 12px 14px;}
+.ph .blk{margin-bottom:12px;}
+.ph .blk h4{
+  margin:0 0 6px;font-size:11px;color:var(--ink3);letter-spacing:.06em;font-weight:700;
+}
+.ph .blk ul{margin:0;padding-left:16px;}
+.ph .blk li{font-size:12px;color:var(--ink2);line-height:1.62;margin-bottom:2px;}
+.ph .box{background:var(--bg2);border-radius:7px;padding:8px 10px;font-size:11.5px;color:var(--ink2);line-height:1.6;}
+.ph .box + .box{margin-top:8px;}
+.ph .box b{color:var(--ink);}
+.flows{display:flex;gap:12px;margin-top:18px;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;}
+.flowcol{flex:1;}
+.flowcol h4{margin:0 0 8px;font-size:11.5px;color:var(--ink3);letter-spacing:.06em;}
+.flowcol .step{font-size:12px;color:var(--ink2);line-height:1.7;}
+
+/* ---------- drawer ---------- */
+.drawer{
+  position:absolute;top:0;right:0;bottom:0;width:392px;background:#fff;
+  border-left:1px solid var(--line);box-shadow:-8px 0 28px rgba(16,24,40,.10);
+  transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;z-index:20;
+}
+.drawer.on{transform:translateX(0);}
+.dh{padding:14px 16px 12px;border-bottom:1px solid var(--line2);position:relative;}
+.dh .crumb{font-size:10.5px;color:var(--ink3);margin-bottom:6px;line-height:1.5;}
+.dh h3{margin:0;font-size:14.5px;line-height:1.45;padding-right:26px;}
+.dh .meta{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;}
+.dclose{
+  position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:6px;
+  border:1px solid var(--line);background:#fff;color:var(--ink3);cursor:pointer;
+  font-size:13px;line-height:1;font-family:inherit;
+}
+.dclose:hover{background:var(--bg2);color:var(--ink);}
+.dbody{padding:14px 16px 60px;overflow-y:auto;flex:1;}
+.sec{margin-bottom:18px;}
+.sec h4{
+  margin:0 0 7px;font-size:10.5px;color:var(--ink3);letter-spacing:.08em;font-weight:700;
+}
+.sec p{margin:0;font-size:12.5px;line-height:1.75;color:var(--ink2);}
+.sec ul{margin:0;padding-left:16px;}
+.sec li{font-size:12.5px;line-height:1.7;color:var(--ink2);margin-bottom:3px;}
+.sec .empty{font-size:12px;color:#B4BBC4;}
+
+/* ---------- print ---------- */
+@media print{
+  body{overflow:visible;height:auto;}
+  .side,.top,.drawer{display:none;}
+  .app{display:block;height:auto;}
+  .body{display:block;overflow:visible;}
+  .mapwrap{overflow:visible;padding-right:0 !important;}
+  .mapscale{width:auto !important;height:auto !important;}
+  .map{position:static;transform:none !important;}
+  li.collapsed > ul.children{display:flex !important;}
+}
+
+/* ===== 本版新增 ===== */
+.node.lv3.tg,.node.lv4.tg{border-left-width:3px;}
+.t-m{background:#E7EDF6;color:#42556F;}
+.t-o{background:#FCEADC;color:#9E5511;}
+.t-p{background:#E2F1EA;color:#2B6A52;}
+.node.tbox{background:#F7F9FC;}
+.node.tbox.t-o{background:#FEF9F4;}
+.node.tbox.t-p{background:#F5FBF8;}
+.node.lv2 .nn{color:var(--ink3);}
+/* 本版内容更长，节点加宽 */
+.node.lv1{width:200px;}
+.node.lv2{width:248px;}
+.node.lv3{width:264px;}
+.node.lv4{width:304px;}
+.node.lv4 .tt{font-size:12px;}
+.navsec{margin:0 0 6px;padding:0 8px;font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.08em;}
+.navlist a.mini{font-size:11.5px;padding:4px 8px;color:var(--ink3);}
+.navlist a.mini .cd{width:26px;}
+/* 任务地图 */
+.maps{padding:26px 34px 80px;background:var(--bg2);}
+.mapb{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+.mapb > header{padding:9px 14px;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;}
+.mapb > header .n{font-size:11px;opacity:.85;font-weight:500;margin-left:auto;}
+.mapb .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px;}
+.mcard{border:1px solid var(--line2);border-radius:9px;padding:9px 10px;background:#FCFDFE;}
+.mcard h4{margin:0 0 6px;font-size:12.5px;line-height:1.45;font-weight:700;color:var(--ink);}
+.mcard .row{font-size:11px;line-height:1.55;color:var(--ink3);margin-top:5px;}
+.mcard .row b{color:var(--ink2);font-weight:600;}
+.mcard .row.o b{color:#9E5511;}
+.mcard .row.p b{color:#2B6A52;}
+.mcard .ft{margin-top:7px;font-size:10.5px;color:#A8B0B8;}
+.maphint{margin:0 0 16px;font-size:12.5px;color:var(--ink3);line-height:1.7;}
+
+/* ===== 缩放 / 标注 / 本地保存（本版新增） ===== */
+.zoombox{
+  display:flex;align-items:center;gap:1px;border:1px solid var(--line);border-radius:7px;
+  background:#fff;padding:1px 2px;flex:none;
+}
+.zoombox .btn{border:0;padding:4px 6px;border-radius:5px;box-shadow:none;}
+.zoombox .btn:hover{background:var(--bg2);}
+.zval{
+  font-size:11.5px;color:var(--ink2);min-width:44px;text-align:center;cursor:pointer;
+  user-select:none;font-variant-numeric:tabular-nums;padding:4px 0;border-radius:5px;white-space:nowrap;
+}
+.zval:hover{background:var(--bg2);color:var(--ink);}
+.savestat{font-size:11px;color:var(--ink3);white-space:nowrap;flex:none;}
+.savestat.ok{color:#2E9E8F;}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600;}
+.btn.pri:hover{background:#2C323B;border-color:#2C323B;color:#fff;}
+
+/* 节点上的标注角标 */
+.node{position:relative;}
+.abadge{
+  position:absolute;top:-7px;right:-7px;min-width:15px;height:15px;padding:0 4px;
+  border-radius:9px;color:#fff;font-size:9.5px;font-weight:700;line-height:15px;
+  text-align:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(16,24,40,.22);
+  pointer-events:none;font-variant-numeric:tabular-nums;
+}
+.node.anno-on{border-color:#F0A92E;}
+
+/* 侧栏：我的标注 */
+.sidebox.tight{padding:10px 12px 12px;}
+.sidebox h2 .cnt2{margin-left:4px;color:var(--ink3);font-weight:600;letter-spacing:0;}
+.annolist{display:flex;flex-direction:column;gap:4px;max-height:188px;overflow:auto;}
+.annolist .empty{font-size:11px;color:#B4BBC4;line-height:1.6;}
+.annorow{
+  display:flex;gap:7px;padding:6px 8px;border-radius:7px;background:#fff;
+  border:1px solid var(--line2);cursor:pointer;transition:.12s;
+}
+.annorow:hover{border-color:#B9C2CC;box-shadow:0 2px 6px rgba(16,24,40,.06);}
+.annorow .dt{width:6px;height:6px;border-radius:50%;flex:none;margin-top:5px;}
+.annorow .tx{flex:1;min-width:0;}
+.annorow .tx b{
+  display:block;font-size:10.5px;color:var(--ink3);font-weight:600;margin-bottom:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.annorow .tx span{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:11.5px;line-height:1.45;color:var(--ink2);
+}
+.annorow.orphan{opacity:.55;}
+.annobar{display:flex;align-items:center;gap:6px;margin-top:8px;}
+.annobar .btn{padding:3px 8px;font-size:11px;}
+.warn{
+  display:none;margin:8px 0 0;padding:8px 9px;border-radius:7px;background:#FDF3E7;
+  border:1px solid #F0D6B4;color:#8A5A18;font-size:10.8px;line-height:1.55;
+}
+.warn.on{display:block;}
+
+/* 抽屉里的标注区 */
+.anno{margin:0 0 16px;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff;}
+.anno .ah{display:flex;align-items:center;gap:6px;padding:7px 10px;background:var(--bg2);border-bottom:1px solid var(--line2);}
+.anno .ah h4{margin:0;font-size:10.5px;letter-spacing:.08em;font-weight:700;color:var(--ink3);}
+.anno .ah .tm{margin-left:auto;font-size:10px;color:#A8B0B8;}
+.anno .ab{padding:9px 10px 10px;}
+.anno textarea{
+  width:100%;min-height:64px;resize:vertical;border:1px solid var(--line);border-radius:7px;
+  padding:7px 9px;font-size:12.5px;line-height:1.6;font-family:inherit;color:var(--ink);
+  outline:none;background:#fff;
+}
+.anno textarea:focus{border-color:#9AA6B4;box-shadow:0 0 0 3px rgba(90,110,140,.08);}
+.anno .states{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 9px;}
+.anno .st{
+  font-size:11px;padding:2px 9px;border-radius:20px;border:1px solid var(--line);
+  background:#fff;color:var(--ink2);cursor:pointer;user-select:none;
+}
+.anno .st:hover{border-color:#B9C2CC;}
+.anno .st.on{color:#fff;border-color:transparent;font-weight:600;}
+.anno .foot{display:flex;align-items:center;gap:6px;}
+.anno .foot .btn{padding:4px 10px;font-size:11.5px;}
+.anno .foot .del{margin-left:auto;color:#AC2128;border-color:#EFD3D3;}
+.anno .foot .del:hover{background:#FBE4E4;border-color:#E5B6B6;color:#8E1A20;}
+
+/* ===== 拖动平移 / 卡片高亮 / 对齐页（本版新增） ===== */
+.mapwrap.handon{cursor:grab;}
+.mapwrap.handon .node{cursor:grab;}
+.mapwrap.handon .hbtn,.mapwrap.handon .tgl{cursor:pointer;}
+.mapwrap.panning,.mapwrap.panning *{cursor:grabbing !important;}
+.btn.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600;}
+
+/* 卡片高亮：外圈 + 浅底 + 左上角批次标签 */
+.node.hl{box-shadow:0 0 0 2.5px var(--hlc),0 3px 12px rgba(16,24,40,.12);}
+.node.hl:not(.lv0):not(.lv1){background-color:var(--hlt);}
+.node.hl .tt{font-weight:700;}
+.hlc{
+  position:absolute;top:-7px;left:-7px;height:15px;padding:0 6px;border-radius:9px;
+  color:#fff;font-size:9.5px;font-weight:700;line-height:15px;white-space:nowrap;
+  border:2px solid #fff;box-shadow:0 1px 4px rgba(16,24,40,.22);pointer-events:none;
+}
+.hbtn{
+  position:absolute;top:50%;right:-9px;transform:translateY(-50%);width:18px;height:18px;
+  border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink3);
+  font-size:11px;line-height:16px;padding:0;cursor:pointer;opacity:0;transition:opacity .12s;
+  font-family:inherit;z-index:3;
+}
+.node:hover > .hbtn,.node.hl > .hbtn{opacity:1;}
+.hbtn:hover{background:var(--bg3);color:var(--ink);border-color:#B9C2CC;}
+
+/* 高亮调色板 */
+.hlpop{
+  position:fixed;z-index:60;background:#fff;border:1px solid var(--line);border-radius:9px;
+  box-shadow:0 10px 30px rgba(16,24,40,.18);padding:8px;display:none;width:200px;
+}
+.hlpop.on{display:block;}
+.hlpop h5{margin:0 0 6px;font-size:10px;color:var(--ink3);letter-spacing:.08em;font-weight:700;}
+.hlpop .opts{display:flex;flex-direction:column;gap:2px;}
+.hlpop .opt{
+  display:flex;align-items:center;gap:8px;padding:4px 7px;border-radius:6px;cursor:pointer;
+  font-size:12px;color:var(--ink2);
+}
+.hlpop .opt:hover{background:var(--bg2);color:var(--ink);}
+.hlpop .opt i{width:10px;height:10px;border-radius:3px;flex:none;}
+.hlpop .opt .k{margin-left:auto;font-size:10.5px;color:#2E9E8F;font-weight:700;}
+.hlpop .sep{height:1px;background:var(--line2);margin:6px 2px;}
+
+/* 右键菜单 */
+.ctx{
+  position:fixed;z-index:60;background:#fff;border:1px solid var(--line);border-radius:9px;
+  box-shadow:0 10px 30px rgba(16,24,40,.18);padding:5px;display:none;min-width:176px;
+}
+.ctx.on{display:block;}
+.ctx .it{
+  display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:6px;cursor:pointer;
+  font-size:12.2px;color:var(--ink2);white-space:nowrap;
+}
+.ctx .it:hover{background:var(--bg2);color:var(--ink);}
+.ctx .it small{margin-left:auto;font-size:10px;color:#B4BBC4;}
+.ctx .hr{height:1px;background:var(--line2);margin:5px 3px;}
+.ctx .hlrow{display:flex;gap:5px;padding:5px 7px 3px;align-items:center;}
+.ctx .hlrow .sw{
+  width:19px;height:19px;border-radius:5px;cursor:pointer;border:2px solid #fff;
+  box-shadow:0 0 0 1px var(--line);transition:transform .1s;
+}
+.ctx .hlrow .sw:hover{transform:scale(1.14);}
+.ctx .hlrow .clr{margin-left:auto;font-size:10.5px;color:var(--ink3);cursor:pointer;}
+.ctx .hlrow .clr:hover{color:#AC2128;}
+.ctx .lb{font-size:10px;color:var(--ink3);letter-spacing:.06em;padding:2px 7px 0;font-weight:700;}
+
+/* 对齐页标题条（可改名） */
+.pagehead{
+  flex:none;display:flex;align-items:flex-start;gap:16px;padding:11px 18px;
+  background:#fff;border-bottom:1px solid var(--line2);
+  transition:padding-right .22s cubic-bezier(.4,0,.2,1);
+}
+.pagehead.off{display:none;}
+.main.drawer-open .pagehead{padding-right:410px;}
+.pagehead h2{
+  margin:0 0 0 -6px;font-size:19px;font-weight:700;outline:none;border-radius:5px;
+  padding:2px 6px;min-width:60px;display:inline-block;
+}
+.pagehead h2:hover{background:var(--bg2);}
+.pagehead h2:focus{background:#fff;box-shadow:0 0 0 2px rgba(90,110,140,.18);}
+.pagehead .ds{
+  margin:4px 0 0 -6px;font-size:12.5px;color:var(--ink3);line-height:1.6;outline:none;
+  border-radius:5px;padding:2px 6px;min-width:150px;
+}
+.pagehead .ds:empty::before{content:attr(data-ph);color:#C2C8D0;}
+.pagehead .ds:hover{background:var(--bg2);}
+.pagehead .ds:focus{background:#fff;box-shadow:0 0 0 2px rgba(90,110,140,.18);}
+.pagehead .pr{margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:52%;}
+.pagehead .mk{
+  display:flex;align-items:center;gap:5px;font-size:11px;border:1px solid var(--line);
+  border-radius:20px;padding:2px 9px;background:#fff;cursor:pointer;
+}
+.pagehead .mk.off{opacity:.42;}
+.pagehead .mk.on{font-weight:700;}
+.pagehead .mk i{width:8px;height:8px;border-radius:2px;flex:none;}
+.pagehead .pm{font-size:11.5px;color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+/* 侧栏：对齐页 */
+.pagelist{display:flex;flex-direction:column;gap:4px;max-height:170px;overflow:auto;}
+.pagerow{
+  display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:7px;background:#fff;
+  border:1px solid var(--line2);cursor:pointer;transition:.12s;
+}
+.pagerow:hover{border-color:#B9C2CC;}
+.pagerow.on{border-color:var(--ink);background:#F4F6F9;}
+.pagerow .nm{flex:1;min-width:0;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pagerow.on .nm{font-weight:700;}
+.pagerow .ct{font-size:10px;color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.pagerow .x{
+  opacity:0;border:0;background:transparent;color:#B4BBC4;cursor:pointer;font-size:13px;
+  padding:0 2px;font-family:inherit;line-height:1;
+}
+.pagerow:hover .x{opacity:1;}
+.pagerow .x:hover{color:#AC2128;}
+.pagerow input{
+  flex:1;min-width:0;font-size:12px;font-family:inherit;padding:2px 5px;border:1px solid var(--line);
+  border-radius:5px;outline:none;
+}
+.paghint{margin:8px 0 0;font-size:10.6px;color:#A8B0B8;line-height:1.6;}
+.mklegend{display:flex;flex-direction:column;gap:3px;}
+.mklegend .row{
+  display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink2);cursor:pointer;
+  border-radius:6px;padding:3px 5px;
+}
+.mklegend .row:hover{background:#fff;color:var(--ink);}
+.mklegend .row i{width:10px;height:10px;border-radius:3px;flex:none;}
+.mklegend .row .n{margin-left:auto;font-size:10px;color:var(--ink3);font-variant-numeric:tabular-nums;}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>城投向产投转型 · 研究前思维导图</h1>
+      <p>地市级综合集团：认知底座到综合转型诊断<br>6 条主线 · 16 个模块 · 387 个研究问题</p>
+      <p style="margin-top:8px;color:#6E7781;background:#EDEFF3;border-radius:6px;padding:6px 8px;">
+        点击节点右侧 <b>+</b> 逐层展开；点击任意节点查看全文与同级问题。<br>
+        <b>右键任一卡片</b>可标高亮（首批 / 第二批 / 重点 / 存疑），再生成对齐页。<br>
+        <b>中键拖动</b>或点顶栏 <b>✋ 拖动</b>可随手平移地图。</p>
+    </div>
+
+    <div class="sidebox">
+      <div class="search">
+        <input id="q" type="text" placeholder="搜索关键词…">
+        <div class="hint" id="qhint">例：工资总额 / 隐性债务 / 名单 / 退出</div>
+      </div>
+    </div>
+
+    <div class="sidebox">
+      <h2>关键锚点</h2>
+      <div class="chips" id="chipsTag">
+        <span class="chip" data-tag="资料">资料入口 16</span>
+        <span class="chip" data-tag="产出">必须产出 16</span>
+        <span class="chip" data-tag="过关">过关标准 16</span>
+      </div>
+      <h2 style="margin-top:12px;">按主线聚焦</h2>
+      <div class="chips" id="chipsBranch"><span class="chip" data-branch="0" title="A｜认识对象" style="border-color: rgb(91, 107, 214); color: rgb(91, 107, 214); font-weight: 700; padding: 2px 9px;">A</span><span class="chip" data-branch="1" title="B｜看清家底" style="border-color: rgb(46, 158, 143); color: rgb(46, 158, 143); font-weight: 700; padding: 2px 9px;">B</span><span class="chip" data-branch="2" title="C｜判断怎么转" style="border-color: rgb(58, 141, 222); color: rgb(58, 141, 222); font-weight: 700; padding: 2px 9px;">C</span><span class="chip" data-branch="3" title="D｜设计怎么管" style="border-color: rgb(194, 87, 143); color: rgb(194, 87, 143); font-weight: 700; padding: 2px 9px;">D</span><span class="chip" data-branch="4" title="E｜推进怎么变" style="border-color: rgb(232, 131, 58); color: rgb(232, 131, 58); font-weight: 700; padding: 2px 9px;">E</span><span class="chip" data-branch="5" title="F｜形成咨询能力（全程穿插）" style="border-color: rgb(107, 122, 140); color: rgb(107, 122, 140); font-weight: 700; padding: 2px 9px;">F</span></div>
+      <h2 style="margin-top:12px;">研究优先级</h2>
+      <div class="chips" id="chipsHL">
+        <span class="chip" id="chipHL">只看高亮</span>
+      </div>
+    </div>
+
+    <div class="navlist" id="nav"><div class="navsec">本页层级</div><a><span class="dot" style="background:#5B6BD6"></span><span style="flex:1">A｜认识对象</span></a><a><span class="dot" style="background:#2E9E8F"></span><span style="flex:1">B｜看清家底</span></a><a><span class="dot" style="background:#3A8DDE"></span><span style="flex:1">C｜判断怎么转</span></a><div class="navsec" style="margin-top: 10px;">7 个模块</div><a class="mini"><span class="dot" style="background:#5B6BD6"></span><span class="cd">M01</span><span style="flex:1">概念与主体</span></a><a class="mini"><span class="dot" style="background:#5B6BD6"></span><span class="cd">M02</span><span style="flex:1">历史与底层逻辑</span></a><a class="mini"><span class="dot" style="background:#5B6BD6"></span><span class="cd">M03</span><span style="flex:1">政策适用</span></a><a class="mini"><span class="dot" style="background:#2E9E8F"></span><span class="cd">M04</span><span style="flex:1">区域与股东</span></a><a class="mini"><span class="dot" style="background:#3A8DDE"></span><span class="cd">M06</span><span style="flex:1">目标与路径</span></a><a class="mini"><span class="dot" style="background:#3A8DDE"></span><span class="cd">M07</span><span style="flex:1">经营业务</span></a><a class="mini"><span class="dot" style="background:#3A8DDE"></span><span class="cd">M08</span><span style="flex:1">产业投资与基金</span></a><div class="navsec" style="margin-top: 10px;">本页高亮卡片</div><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M01｜概念与主体：先能准确说清在研究谁</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M02.1 为什么会出现城投</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M02.3 旧模式为何承压</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M02.4 各方究竟想通过转型得到什么</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M02.6 转型包含哪些相互牵制的变化</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M03｜政策适用：从“有哪些文件”走到“这件事该怎么</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M04.3 市属国资版图</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M04.5 利益相关方与行为动机</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M06.2 做路径比较</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M03.2 公司治理与国资授权线</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M04.2 区域产业基础</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M07.1 城建代建与工程业务</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M07.2 园区与产业载体</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M07.5 产业经营、并购与供应链</span></a><a class="mini"><span class="dot" style="background:#D64545"></span><span class="cd">首</span><span style="flex:1">M08｜产业投资与基金：把募、投、管、退拆开研究</span></a></div>
+
+    <div class="sidebox tight" style="border-top:1px solid var(--line2);">
+      <h2>对齐页<span class="cnt2" id="pageCount">1 个</span></h2>
+      <div class="pagelist" id="pageList"><div class="pagerow" title="全景图（默认页）"><span class="nm">全景图</span><span class="ct">523 张</span></div><div class="pagerow on" title="单击切换；双击重命名"><span class="nm">第一批研究导图</span><span class="ct">15 张</span><button class="x" title="删除这个对齐页（不影响卡片上的高亮）">×</button></div></div>
+      <div class="annobar">
+        <button class="btn pri" id="btnNewPage">按高亮生成对齐页</button>
+      </div>
+      <p class="paghint">先在图上给卡片标高亮（右键卡片，或悬停卡片点右侧圆点），再一键生成只含这些卡片的对齐页：标题可改、说明可写，用来跟团队对齐「先做哪几块」。</p>
+    </div>
+
+    <div class="sidebox tight">
+      <h2>高亮图例<span class="cnt2" id="hlCount">15 个</span></h2>
+      <div class="mklegend" id="hlLegend"><div class="row" title="第一批先行开展（点一下定位到第一张）"><i style="background: rgb(214, 69, 69);"></i><span>首批</span><span class="n">15</span></div><div class="row" title="第二批跟进（点一下定位到第一张）"><i style="background: rgb(224, 134, 0);"></i><span>第二批</span><span class="n">0</span></div><div class="row" title="第三批后续（点一下定位到第一张）"><i style="background: rgb(58, 141, 222);"></i><span>第三批</span><span class="n">0</span></div><div class="row" title="需要重点关注（点一下定位到第一张）"><i style="background: rgb(122, 90, 248);"></i><span>重点</span><span class="n">0</span></div><div class="row" title="口径或边界待确认（点一下定位到第一张）"><i style="background: rgb(46, 158, 143);"></i><span>存疑</span><span class="n">0</span></div></div>
+    </div>
+
+    <div class="sidebox tight" style="border-top:1px solid var(--line2);">
+      <h2>我的标注<span class="cnt2" id="annoCount">4 条</span></h2>
+      <div class="annolist" id="annoList"><div class="annorow" title="点击定位到该节点"><span class="dt" style="background: rgb(224, 134, 0);"></span><div class="tx"><b>待办 · M08｜产业投资与基金：把募、投、管、退拆开研究</b><span>了解募投管退的整个流程，形成关键点认知</span></div></div><div class="annorow" title="点击定位到该节点"><span class="dt" style="background: rgb(224, 134, 0);"></span><div class="tx"><b>待办 · M04.2 区域产业基础</b><span>重点山东</span></div></div><div class="annorow" title="点击定位到该节点"><span class="dt" style="background: rgb(224, 134, 0);"></span><div class="tx"><b>待办 · M03｜政策适用：从“有哪些文件”走到“这件事该怎么判断”</b><span>只研究城投转产投的背景政策（其他细分放在D 模块配套研究）</span></div></div><div class="annorow" title="点击定位到该节点"><span class="dt" style="background: rgb(122, 90, 248);"></span><div class="tx"><b>疑问 · M03.2 公司治理与国资授权线</b><span>改革节点要求相关</span></div></div></div>
+      <div class="annobar">
+        <button class="btn" id="btnExport2">导出备份</button>
+        <button class="btn" id="btnClear">清空全部</button>
+      </div>
+      <p class="warn" id="storeWarn"></p>
+    </div>
+
+    <div class="sidebox" style="border-top:1px solid var(--line2);border-bottom:0;">
+      <h2>图例</h2>
+      <div class="legend">
+        <div><i style="background:#E7EDF6;border:1px solid #CFDAE8"></i>资料入口：要查哪些材料</div>
+        <div><i style="background:#FCEADC;border:1px solid #F3D3B4"></i>必须产出：要交付什么</div>
+        <div><i style="background:#E2F1EA;border:1px solid #C6E3D6"></i>过关标准：怎么算研究到位</div>
+        <div><i style="background:#5B6BD6;border-radius:50%"></i>六条主线 A 至 F，颜色区分</div>
+        <div><i style="background:#D64545;border-radius:50%"></i>标注角标：重 / 待 / 核 / 疑 / 注</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="top">
+      <div class="tabs">
+        <button id="tabTree" class="on">思维导图</button>
+        <button id="tabPlan">任务地图</button>
+      </div>
+      <div class="spacer"></div>
+      <span class="stat" id="statTop">节点 <b>144</b> ｜ 研究问题 <b>102</b> ｜ 资料入口 <b>3</b> ｜ 必须产出 <b>3</b> ｜ 过关标准 <b>3</b> ｜ 高亮 <b>14</b></span>
+      <span class="savestat ok" id="saveStat">已保存 18:12</span>
+      <button class="btn" id="btnCollapse">全景</button>
+      <button class="btn" id="btnExpand">展开模块</button>
+      <button class="btn" id="btnAll">全部展开</button>
+      <button class="btn on" id="btnHand" title="退出小手模式（快捷键 H）">✋ 拖动中</button>
+      <div class="zoombox">
+        <button class="btn" id="btnZoomOut" title="缩小（⌘/Ctrl + −）">−</button>
+        <span class="zval" id="zval" title="点击恢复 100%">104%</span>
+        <button class="btn" id="btnZoomIn" title="放大（⌘/Ctrl + ＋）">＋</button>
+        <button class="btn" id="btnZoomFit" title="适配窗口（⌘/Ctrl + 0）">适配</button>
+      </div>
+      <button class="btn" id="btnExport" title="把标注导出成 JSON 备份文件">导出备份</button>
+      <button class="btn" id="btnImport" title="从 JSON 备份文件恢复标注">导入</button>
+      <button class="btn pri" id="btnAnno" title="给当前选中的节点写标注">＋ 标注</button>
+      <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
+    </div>
+
+    <div class="body">
+    <div class="pagehead" id="pageHead">
+      <div>
+        <h2 id="phName" contenteditable="true" spellcheck="false">第一批研究导图</h2>
+        <p class="ds" id="phDesc" contenteditable="true" spellcheck="false" data-ph="写一句说明：这页要对齐什么、先做哪几块、谁负责…"></p>
+      </div>
+      <div class="pr">
+        <span class="pm" id="phMeta">15 张卡片 · 抽取自高亮</span>
+        <span id="phMarks" style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><span class="mk on" title="点一下把「首批」移出本页"><i style="background: rgb(214, 69, 69);"></i><span style="color: var(--ink);">首批</span></span><span class="mk off" title="点一下把「第二批」加入本页"><i style="background: rgb(224, 134, 0);"></i><span style="color: var(--ink3);">第二批</span></span><span class="mk off" title="点一下把「第三批」加入本页"><i style="background: rgb(58, 141, 222);"></i><span style="color: var(--ink3);">第三批</span></span><span class="mk off" title="点一下把「重点」加入本页"><i style="background: rgb(122, 90, 248);"></i><span style="color: var(--ink3);">重点</span></span><span class="mk off" title="点一下把「存疑」加入本页"><i style="background: rgb(46, 158, 143);"></i><span style="color: var(--ink3);">存疑</span></span></span>
+      </div>
+    </div>
+    <div class="mapwrap handon" id="mapwrap">
+      <div class="mapscale" id="mapscale" style="width: 2788px; height: 4259px;">
+        <div class="map" id="map" style="left: 640px; top: 346px; transform: scale(1.04);"><ul class="tree" id="tree"><li class="d0"><div class="node lv0" data-id="pgroot" style="--c: #2E3A48; background: rgb(46, 58, 72);"><div class="nb"><div class="nt"><span class="tt">第一批研究导图</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d1"><div class="node lv1" data-id="root-0" style="--c: #5B6BD6; background: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">A｜认识对象</span><span class="tags"><span class="tag t-C">3 模块 / 57 问题</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d2"><div class="node lv2 hl" data-id="root-0-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M01｜概念与主体：先能准确说清在研究谁</span><span class="tags"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(119, 128, 138);">9 项</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d3 collapsed"><div class="node lv3" data-id="root-0-0-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M01.1 城投究竟是什么</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-0-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">分开企业名称、历史功能、实际业务、名单分类和当前监管身份；名字叫“产投”能证明哪些事，不能证明哪些事？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-0-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分城市建设投融资、土地整理、代建、城市运营、公用事业、产业投资，分别是谁的需求、谁付钱、谁承担风险？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-0-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">梳理“地方国企”“地方融资平台”“城投债发行人”的交集与差别；不能自行从公开名称推断内部名单状态。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-0-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M01.2 产投的几种实际形态</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-1-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分经营产业、控股产业企业、少数股权投资、基金出资、基金管理和招商服务；各自靠什么取得收入或回报？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-1-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分国有资本投资公司、国有资本运营公司和一般产业投资企业；名称与取得专项改革授权分别是什么关系？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-1-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分集团总部、产业子集团、基金管理人、基金、项目公司、被投企业，画清法人和资金边界。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-0-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M01.3 几种“转型完成”不能混成一个结论</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-2-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">分别识别融资平台退出、债券分类变化、经营模式改变、国资改革授权、组织整合的判断依据。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-2-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">比较“资产划入”“营收增长”“评级提高”“退出落袋”“经营改善”，每项究竟证明了什么？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-2-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">设计一个反例：更名、资产扩大、评级改善，但现金和经营能力没有改善，如何识别？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-0-3" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M01.4 六类容易混淆的关系</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-3-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">政府与企业、财政与企业、出资人与企业、母子公司、管理人与基金、基金与被投企业，各是什么法律和经济关系？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-3-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">谁能布置任务、谁能签合同、谁能审批预算、谁享有投资收益、谁承担投资损失？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-3-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">同一个人兼任多个职务时，如何辨认其以什么身份作出什么决定？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-0-4" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M01.5 必修的经济与财务语言</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-4-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">资产、净资产、资本金、负债、营业收入、利润、现金流各表示什么，为什么相互不能替代？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-4-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">控股、参股、实际控制、合并报表、权益法、公允价值变动分别怎样影响对企业的观察？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-4-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">认缴、实缴、投资成本、账面估值、已实现收益、现金分配分别是什么；基金规模究竟是哪一种？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-0-5" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M01.6 必修的管理语言</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-5-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">治理决定谁有权作决定，管控决定集团怎样组织监督，流程决定事项怎样运行，三者怎样衔接？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-5-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">主责主业、战略、年度经营计划、预算、绩效责任书分别解决什么问题？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-0-5-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">岗位、职级、行政职务、工资总额、薪酬结构和中长期激励怎样区分？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3 tbox t-m" data-id="root-0-0-6" data-tag="资料" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">资料入口：公司章程、官网沿革、出资关系、公开债券文件；基础公司法、会计和国资知识。</span><span class="tags"><span class="tag t-m">资料</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d3 collapsed"><div class="node lv3 tbox t-o" data-id="root-0-0-7" data-tag="产出" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">必须产出：术语卡、主体关系图、企业身份卡、六种“完成”对照表。</span><span class="tags"><span class="tag t-o">产出</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d3 collapsed"><div class="node lv3 tbox t-p" data-id="root-0-0-8" data-tag="过关" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">过关标准：拿到一家陌生企业的简介，能指出已知身份、不能据此判断的身份，以及需要补查的材料；用白话解释上述术语而不依赖术语互相解释。</span><span class="tags"><span class="tag t-p">过关</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d2"><div class="node lv2" data-id="root-0-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M02｜历史与底层逻辑：先理解旧模式如何运转</span><span class="tags"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(119, 128, 138);">4 项</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d3"><div class="node lv3 hl" data-id="root-0-1-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M02.1 为什么会出现城投</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-0-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究地方基础设施建设需求、财政收支安排和融资渠道之间的历史关系；按时期识别制度变化。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-0-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">不同城市为何形成建投、交投、水务、园区、文旅等不同平台组合，原有分工怎样影响今天的整合？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-0-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分当时合理的功能安排、后来形成的路径依赖、需要具体证据认定的问题。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3"><div class="node lv3 hl" data-id="root-0-1-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M02.3 旧模式为何承压</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-2-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">将财政与土地收入变化、项目回款、融资续接、利息负担、资产变现能力串成因果链。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-2-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分建设需求下降、财政支付慢、融资限制、资产收益低和管理低效，不能全称为“土地财政退潮”。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-2-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">用城市连续年度数据验证压力，研究逆向例子：土地收入下降时，哪些业务仍能稳定运转？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3"><div class="node lv3 hl" data-id="root-0-1-3" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M02.4 各方究竟想通过转型得到什么</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-3-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">政府可能关注公共服务、产业和财政可持续；出资人可能关注布局、资本回报和风险；企业关注生存、信用和发展。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-3-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">银行、债券投资者、员工、产业合作方分别关心什么，其目标怎样冲突？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-3-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分政策性目标、经营性目标、融资诉求和组织整合诉求，识别哪项是真正的首要问题。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3"><div class="node lv3 hl" data-id="root-0-1-5" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M02.6 转型包含哪些相互牵制的变化</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-5-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">分开财政债务关系变化、资产业务变化、组织能力变化和人员行为变化，分别由谁推动？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-5-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">化债、公共任务、产业培育和盈利目标之间，哪些冲突可以通过分类解决，哪些必须由股东作取舍？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-1-5-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">什么条件下应优先稳定现金、改善运营，什么条件下才有余力扩大产业投资？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li></ul></li><li class="d2"><div class="node lv2 anno-on hl" data-id="root-0-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M03｜政策适用：从“有哪些文件”走到“这件事该怎么判断”</span><span class="tags"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(119, 128, 138);">10 项</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="abadge" title="待办 · 只研究城投转产投的背景政策（其他细分放在D 模块配套研究）" style="background: rgb(224, 134, 0);">待</span><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d3 collapsed"><div class="node lv3" data-id="root-0-2-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M03.1 债务与平台治理线</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-0-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究预算法及地方政府债务管理制度；区分法定政府债务、隐性债务、企业经营性债务、或有责任。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-0-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究新增债务约束、存量处置、融资平台退出、退出后监测各管什么，分别向谁核实？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-0-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">对报告提到的35、47、14、134、150号等简称，逐一核实完整身份、版本、适用范围和可取得性；未取得全文时不补写操作细则。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3 anno-on hl" data-id="root-0-2-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M03.2 公司治理与国资授权线</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="abadge" title="疑问 · 改革节点要求相关" style="background: rgb(122, 90, 248);">疑</span><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-1-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究公司法、企业国有资产法、党组织参与治理、董事会和经理层职责与当地实施安排。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-1-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分国资监管权、股东权、董事会职权与经理层经营权；“政府同意”能否替代公司治理程序？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-1-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究国有资本投资运营改革文件、授权清单及企业章程；中央企业做法哪些只能作比较参考？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-2-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M03.3 投资、产权交易与重组线</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-2-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">对照当地投资管理、主业和负面清单要求，判断直投、并购、基金出资分别需要哪些程序。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-2-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究评估、备案或核准、进场交易、非公开协议和无偿划转的适用条件，不把重组当成一项工商动作。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-2-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分非金融企业国资、金融企业国资、上市公司、基金份额等不同交易对象可能适用的规则。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-2-3" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M03.4 政府投资基金与私募基金线</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-3-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">先穿透资金性质：财政预算出资、委托国企出资、注资后专项用于基金、自有经营资金分别如何判断适用范围？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-3-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究政府基金定位、设立层级、投向、返投、登记、管理人、绩效和退出规则；基金是否私募还需核对相关监管要求。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-3-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">纳入2026年公开的布局投向与投向评价配套文件，区分发文日期、公开日期和实施条款，不能只按文号年份检索。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-2-4" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M03.5 绩效、工资与激励线</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-4-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究本市经营业绩考核、工资总额、负责人薪酬、职业经理人、契约化管理和中长期激励规则。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-4-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">区分集团负责人、子企业负责人、职业经理人、普通员工、基金专业团队等人员适用范围。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-4-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">对跟投、超额收益分享、股权激励等工具分别查对象、权限、资金来源、会计税务和退出，不因“市场化”就假定可用。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-2-5" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M03.6 经营、招商和资产盘活线</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-5-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">将政府采购、购买服务、特许经营、土地房产、招投标、税务和公平竞争要求映射到具体业务。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-5-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">研究招商任务与统一大市场、财政支持与企业经营、资源授权与公平竞争之间的边界。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-5-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">REITs、资产证券化等工具须查基础资产、权属、收益、程序与成本；不能把工具名称当成适用条件已经具备。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-0-2-6" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">M03.7 建立政策适用卡与冲突核查机制</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-6-0" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">每条政策记录：原文、条款位置、发布主体、效力层级、时间、地域、对象、事项、例外、配套要求和核查状态。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-6-1" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">标注“禁止、应当、可以、鼓励、试点、需批准”等措辞差异，输出对当前事项的实际影响。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-0-2-6-2" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">分开正式文件、官方解读、公开审核规则、非公开执行口径、市场传闻和研究者建议；不把“335”“224”等市场说法设为统一转型标准。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3 tbox t-m" data-id="root-0-2-7" data-tag="资料" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">资料入口：政府、财政、国资、人社、发改、证监、交易所和相关协会的正式渠道；当地及企业制度。</span><span class="tags"><span class="tag t-m">资料</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d3 collapsed"><div class="node lv3 tbox t-o" data-id="root-0-2-8" data-tag="产出" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">必须产出：政策台账、适用矩阵、待核实口径表、典型事项政策判断卡。首批来源见附录A。</span><span class="tags"><span class="tag t-o">产出</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d3 collapsed"><div class="node lv3 tbox t-p" data-id="root-0-2-9" data-tag="过关" style="--c: #5B6BD6; border-left-color: rgb(91, 107, 214);"><div class="nb"><div class="nt"><span class="tt">过关标准：面对“能否出资设基金”“能否给团队超额收益分享”等具体问题，能列出适用判断、必要前提和缺失信息，而非只贴政策标题。</span><span class="tags"><span class="tag t-p">过关</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li></ul></li><li class="d1"><div class="node lv1" data-id="root-1" style="--c: #2E9E8F; background: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">B｜看清家底</span><span class="tags"><span class="tag t-C">1 模块 / 9 问题</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d2"><div class="node lv2" data-id="root-1-0" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">M04｜区域与股东：弄清这家企业为何存在</span><span class="tags"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(119, 128, 138);">3 项</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d3"><div class="node lv3 anno-on hl" data-id="root-1-0-1" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M04.2 区域产业基础</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="abadge" title="待办 · 重点山东" style="background: rgb(224, 134, 0);">待</span><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-1-0" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">拆产业链、龙头、配套、人才、能源、物流、土地和研发条件；从“有产业规划”追到“有真实需求”。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-1-1" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">区分产业规模大、产业利润高、适合地方培育和适合集团投资，四者为何不等同？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-1-2" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">研究本地企业真正缺的是资本、订单、空间、技术、管理还是渠道；不同缺口需要什么工具？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3"><div class="node lv3 hl" data-id="root-1-0-2" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M04.3 市属国资版图</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-2-0" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">梳理本市城投、交投、产投、资本运营、园区、水务、文旅等主体的定位、资产和功能重叠。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-2-1" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">哪些资产由企业拥有，哪些仅被委托管理；哪些资源属于其他层级或部门，不能假定可划入？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-2-2" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">集团为什么承担这项任务，有无替代主体，是否正在重复建设能力？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3"><div class="node lv3 hl" data-id="root-1-0-4" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M04.5 利益相关方与行为动机</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-4-0" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">政府部门、出资人、总部、原平台、子公司、债权人、员工和合作方各自会失去或得到什么？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-4-1" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">资金统筹、资产划转、人事调整和收入分配会改变哪些既有利益？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-1-0-4-2" style="--c: #2E9E8F; border-left-color: rgb(46, 158, 143);"><div class="nb"><div class="nt"><span class="tt">哪些阻力来自信息、能力或不信任，哪些来自目标和利益确实不一致？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li></ul></li></ul></li><li class="d1"><div class="node lv1" data-id="root-2" style="--c: #3A8DDE; background: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">C｜判断怎么转</span><span class="tags"><span class="tag t-C">3 模块 / 36 问题</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d2"><div class="node lv2" data-id="root-2-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M06｜目标与路径：先判断该往哪里转</span><span class="tags"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(119, 128, 138);">1 项</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d3"><div class="node lv3 hl" data-id="root-2-0-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M06.2 做路径比较</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-0-1-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">分别比较城市运营、公用事业、园区服务、产业经营、股权投资、资本运营和先稳经营处置存量。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-0-1-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">每条路径要列客户、支付方、投入、现金周期、团队要求、风险、政策条件和协同。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-0-1-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">区分当前可做、补齐条件后可做、长期不适合做，不把组合发展理解为每条路径都做。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li></ul></li><li class="d2"><div class="node lv2" data-id="root-2-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M07｜经营业务：弄清集团靠什么持续取得现金</span><span class="tags"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(119, 128, 138);">3 项</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d3"><div class="node lv3 hl" data-id="root-2-1-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M07.1 城建代建与工程业务</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-0-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">委托、施工、代建、投资和融资责任分别由谁承担，收入确认和结算回款如何发生？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-0-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">查建设成本、管理费、融资成本、审计结算和回款周期，区分“有工程”和“有利润”。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-0-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">转型后哪些存量项目必须继续履行，怎样避免停止旧模式时留下无资金项目？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3"><div class="node lv3 hl" data-id="root-2-1-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M07.2 园区与产业载体</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-1-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">从拿地、建设、招商、租售、物业到企业服务复原商业模式，谁为每项服务付费？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-1-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">出租率、实际收缴、租金、维护、融资和再投资如何共同决定现金回报？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-1-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">产业招商、载体出租和股权投资之间有无真实协同，是否反而形成低租金和高投入负担？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3"><div class="node lv3 hl" data-id="root-2-1-4" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M07.5 产业经营、并购与供应链</span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-4-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">控股实业企业怎样形成产品、客户、毛利、周转和研发能力，与少数股权投资有什么不同？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-4-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">并购取得的利润、负债、商誉、或有责任和管理难度怎样进入集团？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-1-4-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">贸易业务需要验证哪些真实交易、信用和货权条件，哪些收入增长伴随更大的现金风险？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li></ul></li><li class="d2"><div class="node lv2 anno-on hl" data-id="root-2-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222); --hlc: #D64545; --hlt: #D6454514;"><div class="nb"><div class="nt"><span class="tt">M08｜产业投资与基金：把募、投、管、退拆开研究</span><span class="tags"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(119, 128, 138);">10 项</span></span></div></div><button class="tgl" type="button">−</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button><span class="abadge" title="待办 · 了解募投管退的整个流程，形成关键点认知" style="background: rgb(224, 134, 0);">待</span><span class="hlc" title="首批：第一批先行开展" style="background: rgb(214, 69, 69);">首批</span></div><ul class="children"><li class="d3 collapsed"><div class="node lv3" data-id="root-2-2-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M08.1 工具和资金性质先行</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-0-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">比较直投、基金LP出资、管理基金、控股并购和招商服务，分别赚什么钱、承担什么责任？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-0-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">穿透资金来源和用途约束，识别财政资金、受托资金和企业资金的边界。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-0-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">为什么集团、管理人、基金和被投企业之间的现金不能直接当作集团自由现金？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-2-2-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M08.2 是否需要基金</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-1-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">先问设立目的、项目来源、资金匹配和管理能力，再比较参投已有基金与自设基金。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-1-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">基金规模、实缴进度、期限、费用、决策权和退出安排如何影响实际效果？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-1-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">无基金是否仍能实现产业目标；有基金是否反而增加资金闲置、重复收费和治理层次？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-2-2-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M08.3 募资与管理人选择</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-2-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">LP为何出资，政府、国企、金融机构和市场化资本的收益与期限要求有什么差别？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-2-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">查GP或管理人的历史业绩、团队稳定性、真实退出、利益冲突和投后能力。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-2-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">区分管理规模、认缴规模、可投资金额、实投金额和实际带动社会资本，统一统计口径。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-2-2-3" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M08.4 项目筛选、尽调与估值</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-3-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">将产业研究、项目来源、初筛、技术市场财务法律尽调、估值和风险审查逐步连起来。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-3-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">每阶段什么证据足以继续，什么问题必须补查，什么问题应否决？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-3-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">研究订单、技术成熟度、客户集中、资金消耗、关联交易、估值假设和退出买方，避免以赛道热度代替判断。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-2-2-4" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M08.5 投决与协议</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-4-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">核对股东、董事会、经理层、投委会、基金合伙协议各自权限；不能预设所有投委会都只有咨询权或都有最终决定权。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-4-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">研究出资条件、分期、治理权、反稀释、回购、优先权等条款的作用、约束和可执行性。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-4-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">招商谈判、专业判断和公司治理程序如何衔接，谁记录反对意见和剩余风险？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-2-2-5" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M08.6 投后管理与风险处置</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-5-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">分别研究参股与控股企业的信息权、董事履职、经营监测、资源服务和重大事项处理。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-5-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">追加投资的依据是什么，怎样区分合理续投与为掩盖失败不断追加？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-5-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">经营不达预期、估值下调、违约和控制权变化如何触发分级处置与责任记录？</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3" data-id="root-2-2-6" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">M08.7 退出与组合评价</span></div></div><button class="tgl" type="button">+</button><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div><ul class="children"><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-6-0" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">比较股权转让、并购、上市后减持、回购、基金份额转让和清算，逐项查条件、买方、时间、成本和国资程序。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-6-1" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">REITs针对符合条件的基础设施等资产安排，不能当成一般未上市科技股权的通用退出通道；S基金也不保证有买方或合理价格。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d4 collapsed"><div class="node lv4" data-id="root-2-2-6-2" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">研究IRR、DPI、TVPI及已实现现金，区分项目回报、基金回报、LP净回报、区域产业效果，不能相互替代。</span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li><li class="d3 collapsed"><div class="node lv3 tbox t-m" data-id="root-2-2-7" data-tag="资料" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">资料入口：基金设立方案、合伙协议、管理协议、投决资料、投后报告、实际分配和退出文件。</span><span class="tags"><span class="tag t-m">资料</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d3 collapsed"><div class="node lv3 tbox t-o" data-id="root-2-2-8" data-tag="产出" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">必须产出：主体与资金图、工具选择表、一个项目全过程复原、基金经济账、退出情景和组合评价表。</span><span class="tags"><span class="tag t-o">产出</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li><li class="d3 collapsed"><div class="node lv3 tbox t-p" data-id="root-2-2-9" data-tag="过关" style="--c: #3A8DDE; border-left-color: rgb(58, 141, 222);"><div class="nb"><div class="nt"><span class="tt">过关标准：能回答钱从哪里来、谁有权投、靠什么赚钱、失败由谁承担、什么时候能拿回现金；不把设基金和招商落地等同投资成功。</span><span class="tags"><span class="tag t-p">过关</span></span></div></div><button class="hbtn" type="button" title="标高亮（右键卡片也可以）">◉</button></div></li></ul></li></ul></li></ul></li></ul></div>
+      </div>
+    </div>
+
+    <div id="viewPlan"></div>
+
+    <aside class="drawer" id="drawer">
+      <div class="dh">
+        <button class="dclose" id="dclose">×</button>
+        <div class="crumb" id="dcrumb">第一批研究导图  ›  C｜判断怎么转</div>
+        <h3 id="dtitle">M08｜产业投资与基金：把募、投、管、退拆开研究</h3>
+        <div class="meta" id="dmeta"><span class="tag t-C" style="background: rgb(237, 239, 243); color: rgb(90, 102, 115);">10 个子项 / 24 个问题</span></div>
+      </div>
+      <div class="dbody" id="dbody"><div class="anno"><div class="ah"><h4>高亮标记</h4><span class="tm">首批 · 第一批先行开展</span></div><div class="ab"><div class="states" style="margin: 0px;"><span class="st on" title="第一批先行开展" style="background: rgb(214, 69, 69);">首批</span><span class="st" title="第二批跟进">第二批</span><span class="st" title="第三批后续">第三批</span><span class="st" title="需要重点关注">重点</span><span class="st" title="口径或边界待确认">存疑</span></div></div></div><div class="anno"><div class="ah"><h4>我的标注</h4><span class="tm">待办 · 10月15日 18:11</span></div><div class="ab"><textarea placeholder="写点什么：这一步为什么卡住 / 要找谁要材料 / 需要核对的口径…（停止输入后自动保存）"></textarea><div class="states"><span class="st" title="标为「重点」">重点</span><span class="st on" title="标为「待办」" style="background: rgb(224, 134, 0);">待办</span><span class="st" title="标为「已核」">已核</span><span class="st" title="标为「疑问」">疑问</span><span class="st" title="标为「备注」">备注</span></div><div class="foot"><button class="btn pri">保存</button><button class="btn del">删除标注</button></div></div></div><div class="sec"><h4>下级条目（10）</h4><ul><li style="cursor: pointer;">M08.1 工具和资金性质先行</li><li style="cursor: pointer;">M08.2 是否需要基金</li><li style="cursor: pointer;">M08.3 募资与管理人选择</li><li style="cursor: pointer;">M08.4 项目筛选、尽调与估值</li><li style="cursor: pointer;">M08.5 投决与协议</li><li style="cursor: pointer;">M08.6 投后管理与风险处置</li><li style="cursor: pointer;">M08.7 退出与组合评价</li><li style="cursor: pointer;">资料入口：基金设立方案、合伙协议、管理协议、投决资料、投后报告、实际分配和退出文件。</li><li style="cursor: pointer;">必须产出：主体与资金图、工具选择表、一个项目全过程复原、基金经济账、退出情景和组合评价表。</li><li style="cursor: pointer;">过关标准：能回答钱从哪里来、谁有权投、靠什么赚钱、失败由谁承担、什么时候能拿回现金；不把设基金和招商落地等同投资成功。</li></ul></div></div>
+    </aside>
+    </div>
+  </div>
+</div>
+
+<div class="hlpop" id="hlpop" style="left: 1178.64px; top: 567.475px;"><h5>标记这张卡片</h5><div class="opts"><div class="opt" title="第一批先行开展"><i style="background:#D64545"></i><span>首批</span></div><div class="opt" title="第二批跟进"><i style="background:#E08600"></i><span>第二批</span></div><div class="opt" title="第三批后续"><i style="background:#3A8DDE"></i><span>第三批</span></div><div class="opt" title="需要重点关注"><i style="background:#7A5AF8"></i><span>重点</span></div><div class="opt" title="口径或边界待确认"><i style="background:#2E9E8F"></i><span>存疑</span></div></div><div class="sep"></div><div class="opts"><div class="opt"><span>清除高亮</span></div><div class="opt"><span>按全部高亮生成对齐页</span></div></div></div>
+<div class="ctx" id="ctx"></div>
+
+<script>
+const ROOT = {
+ "title": "地市级综合集团：认知底座到综合转型诊断",
+ "children": [
+  {
+   "title": "A｜认识对象",
+   "children": [
+    {
+     "title": "M01｜概念与主体：先能准确说清在研究谁",
+     "children": [
+      {
+       "title": "M01.1 城投究竟是什么",
+       "children": [
+        {
+         "title": "分开企业名称、历史功能、实际业务、名单分类和当前监管身份；名字叫“产投”能证明哪些事，不能证明哪些事？"
+        },
+        {
+         "title": "区分城市建设投融资、土地整理、代建、城市运营、公用事业、产业投资，分别是谁的需求、谁付钱、谁承担风险？"
+        },
+        {
+         "title": "梳理“地方国企”“地方融资平台”“城投债发行人”的交集与差别；不能自行从公开名称推断内部名单状态。"
+        }
+       ]
+      },
+      {
+       "title": "M01.2 产投的几种实际形态",
+       "children": [
+        {
+         "title": "区分经营产业、控股产业企业、少数股权投资、基金出资、基金管理和招商服务；各自靠什么取得收入或回报？"
+        },
+        {
+         "title": "区分国有资本投资公司、国有资本运营公司和一般产业投资企业；名称与取得专项改革授权分别是什么关系？"
+        },
+        {
+         "title": "区分集团总部、产业子集团、基金管理人、基金、项目公司、被投企业，画清法人和资金边界。"
+        }
+       ]
+      },
+      {
+       "title": "M01.3 几种“转型完成”不能混成一个结论",
+       "children": [
+        {
+         "title": "分别识别融资平台退出、债券分类变化、经营模式改变、国资改革授权、组织整合的判断依据。"
+        },
+        {
+         "title": "比较“资产划入”“营收增长”“评级提高”“退出落袋”“经营改善”，每项究竟证明了什么？"
+        },
+        {
+         "title": "设计一个反例：更名、资产扩大、评级改善，但现金和经营能力没有改善，如何识别？"
+        }
+       ]
+      },
+      {
+       "title": "M01.4 六类容易混淆的关系",
+       "children": [
+        {
+         "title": "政府与企业、财政与企业、出资人与企业、母子公司、管理人与基金、基金与被投企业，各是什么法律和经济关系？"
+        },
+        {
+         "title": "谁能布置任务、谁能签合同、谁能审批预算、谁享有投资收益、谁承担投资损失？"
+        },
+        {
+         "title": "同一个人兼任多个职务时，如何辨认其以什么身份作出什么决定？"
+        }
+       ]
+      },
+      {
+       "title": "M01.5 必修的经济与财务语言",
+       "children": [
+        {
+         "title": "资产、净资产、资本金、负债、营业收入、利润、现金流各表示什么，为什么相互不能替代？"
+        },
+        {
+         "title": "控股、参股、实际控制、合并报表、权益法、公允价值变动分别怎样影响对企业的观察？"
+        },
+        {
+         "title": "认缴、实缴、投资成本、账面估值、已实现收益、现金分配分别是什么；基金规模究竟是哪一种？"
+        }
+       ]
+      },
+      {
+       "title": "M01.6 必修的管理语言",
+       "children": [
+        {
+         "title": "治理决定谁有权作决定，管控决定集团怎样组织监督，流程决定事项怎样运行，三者怎样衔接？"
+        },
+        {
+         "title": "主责主业、战略、年度经营计划、预算、绩效责任书分别解决什么问题？"
+        },
+        {
+         "title": "岗位、职级、行政职务、工资总额、薪酬结构和中长期激励怎样区分？"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：公司章程、官网沿革、出资关系、公开债券文件；基础公司法、会计和国资知识。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：术语卡、主体关系图、企业身份卡、六种“完成”对照表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：拿到一家陌生企业的简介，能指出已知身份、不能据此判断的身份，以及需要补查的材料；用白话解释上述术语而不依赖术语互相解释。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M02｜历史与底层逻辑：先理解旧模式如何运转",
+     "children": [
+      {
+       "title": "M02.1 为什么会出现城投",
+       "children": [
+        {
+         "title": "研究地方基础设施建设需求、财政收支安排和融资渠道之间的历史关系；按时期识别制度变化。"
+        },
+        {
+         "title": "不同城市为何形成建投、交投、水务、园区、文旅等不同平台组合，原有分工怎样影响今天的整合？"
+        },
+        {
+         "title": "区分当时合理的功能安排、后来形成的路径依赖、需要具体证据认定的问题。"
+        }
+       ]
+      },
+      {
+       "title": "M02.2 复原传统城建项目的一笔完整账",
+       "children": [
+        {
+         "title": "从项目提出、授权、资本金、借款、建设、验收、结算到回款，逐步标出责任主体。"
+        },
+        {
+         "title": "土地、财政资金、银行贷款、债券、企业经营收入分别进入哪个账户，通过什么合同关系流转？"
+        },
+        {
+         "title": "哪些投入形成企业资产，哪些形成政府应收款，哪些只形成长期资金占用，哪些收益存在兑现条件？"
+        }
+       ]
+      },
+      {
+       "title": "M02.3 旧模式为何承压",
+       "children": [
+        {
+         "title": "将财政与土地收入变化、项目回款、融资续接、利息负担、资产变现能力串成因果链。"
+        },
+        {
+         "title": "区分建设需求下降、财政支付慢、融资限制、资产收益低和管理低效，不能全称为“土地财政退潮”。"
+        },
+        {
+         "title": "用城市连续年度数据验证压力，研究逆向例子：土地收入下降时，哪些业务仍能稳定运转？"
+        }
+       ]
+      },
+      {
+       "title": "M02.4 各方究竟想通过转型得到什么",
+       "children": [
+        {
+         "title": "政府可能关注公共服务、产业和财政可持续；出资人可能关注布局、资本回报和风险；企业关注生存、信用和发展。"
+        },
+        {
+         "title": "银行、债券投资者、员工、产业合作方分别关心什么，其目标怎样冲突？"
+        },
+        {
+         "title": "区分政策性目标、经营性目标、融资诉求和组织整合诉求，识别哪项是真正的首要问题。"
+        }
+       ]
+      },
+      {
+       "title": "M02.5 “信用切换”要拆到具体机制",
+       "children": [
+        {
+         "title": "政府关联、公共职能、资产质量、经营现金和外部支持预期分别怎样影响融资判断？"
+        },
+        {
+         "title": "区分法律上不得担保、企业责任独立与市场实际信用定价；不能简单假定政府关联立即消失。"
+        },
+        {
+         "title": "转型会否短期增加融资成本、影响授信或担保安排；怎样分析先退出后发展与同步推进的条件？"
+        }
+       ]
+      },
+      {
+       "title": "M02.6 转型包含哪些相互牵制的变化",
+       "children": [
+        {
+         "title": "分开财政债务关系变化、资产业务变化、组织能力变化和人员行为变化，分别由谁推动？"
+        },
+        {
+         "title": "化债、公共任务、产业培育和盈利目标之间，哪些冲突可以通过分类解决，哪些必须由股东作取舍？"
+        },
+        {
+         "title": "什么条件下应优先稳定现金、改善运营，什么条件下才有余力扩大产业投资？"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：地方财政预决算、统计公报、政府工作报告、企业历史募集说明书和审计报告。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：历史时间轴、旧模式资金图、转型驱动的因果图、利益相关方目标表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能用一笔项目的运行过程解释为什么要变、哪里必须变、什么不能一刀切，而非只复述宏观趋势。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M03｜政策适用：从“有哪些文件”走到“这件事该怎么判断”",
+     "children": [
+      {
+       "title": "M03.1 债务与平台治理线",
+       "children": [
+        {
+         "title": "研究预算法及地方政府债务管理制度；区分法定政府债务、隐性债务、企业经营性债务、或有责任。"
+        },
+        {
+         "title": "研究新增债务约束、存量处置、融资平台退出、退出后监测各管什么，分别向谁核实？"
+        },
+        {
+         "title": "对报告提到的35、47、14、134、150号等简称，逐一核实完整身份、版本、适用范围和可取得性；未取得全文时不补写操作细则。"
+        }
+       ]
+      },
+      {
+       "title": "M03.2 公司治理与国资授权线",
+       "children": [
+        {
+         "title": "研究公司法、企业国有资产法、党组织参与治理、董事会和经理层职责与当地实施安排。"
+        },
+        {
+         "title": "区分国资监管权、股东权、董事会职权与经理层经营权；“政府同意”能否替代公司治理程序？"
+        },
+        {
+         "title": "研究国有资本投资运营改革文件、授权清单及企业章程；中央企业做法哪些只能作比较参考？"
+        }
+       ]
+      },
+      {
+       "title": "M03.3 投资、产权交易与重组线",
+       "children": [
+        {
+         "title": "对照当地投资管理、主业和负面清单要求，判断直投、并购、基金出资分别需要哪些程序。"
+        },
+        {
+         "title": "研究评估、备案或核准、进场交易、非公开协议和无偿划转的适用条件，不把重组当成一项工商动作。"
+        },
+        {
+         "title": "区分非金融企业国资、金融企业国资、上市公司、基金份额等不同交易对象可能适用的规则。"
+        }
+       ]
+      },
+      {
+       "title": "M03.4 政府投资基金与私募基金线",
+       "children": [
+        {
+         "title": "先穿透资金性质：财政预算出资、委托国企出资、注资后专项用于基金、自有经营资金分别如何判断适用范围？"
+        },
+        {
+         "title": "研究政府基金定位、设立层级、投向、返投、登记、管理人、绩效和退出规则；基金是否私募还需核对相关监管要求。"
+        },
+        {
+         "title": "纳入2026年公开的布局投向与投向评价配套文件，区分发文日期、公开日期和实施条款，不能只按文号年份检索。"
+        }
+       ]
+      },
+      {
+       "title": "M03.5 绩效、工资与激励线",
+       "children": [
+        {
+         "title": "研究本市经营业绩考核、工资总额、负责人薪酬、职业经理人、契约化管理和中长期激励规则。"
+        },
+        {
+         "title": "区分集团负责人、子企业负责人、职业经理人、普通员工、基金专业团队等人员适用范围。"
+        },
+        {
+         "title": "对跟投、超额收益分享、股权激励等工具分别查对象、权限、资金来源、会计税务和退出，不因“市场化”就假定可用。"
+        }
+       ]
+      },
+      {
+       "title": "M03.6 经营、招商和资产盘活线",
+       "children": [
+        {
+         "title": "将政府采购、购买服务、特许经营、土地房产、招投标、税务和公平竞争要求映射到具体业务。"
+        },
+        {
+         "title": "研究招商任务与统一大市场、财政支持与企业经营、资源授权与公平竞争之间的边界。"
+        },
+        {
+         "title": "REITs、资产证券化等工具须查基础资产、权属、收益、程序与成本；不能把工具名称当成适用条件已经具备。"
+        }
+       ]
+      },
+      {
+       "title": "M03.7 建立政策适用卡与冲突核查机制",
+       "children": [
+        {
+         "title": "每条政策记录：原文、条款位置、发布主体、效力层级、时间、地域、对象、事项、例外、配套要求和核查状态。"
+        },
+        {
+         "title": "标注“禁止、应当、可以、鼓励、试点、需批准”等措辞差异，输出对当前事项的实际影响。"
+        },
+        {
+         "title": "分开正式文件、官方解读、公开审核规则、非公开执行口径、市场传闻和研究者建议；不把“335”“224”等市场说法设为统一转型标准。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：政府、财政、国资、人社、发改、证监、交易所和相关协会的正式渠道；当地及企业制度。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：政策台账、适用矩阵、待核实口径表、典型事项政策判断卡。首批来源见附录A。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：面对“能否出资设基金”“能否给团队超额收益分享”等具体问题，能列出适用判断、必要前提和缺失信息，而非只贴政策标题。",
+       "tag": "过关"
+      }
+     ]
+    }
+   ],
+   "color": "#5B6BD6"
+  },
+  {
+   "title": "B｜看清家底",
+   "children": [
+    {
+     "title": "M04｜区域与股东：弄清这家企业为何存在",
+     "children": [
+      {
+       "title": "M04.1 区域财政与支付能力",
+       "children": [
+        {
+         "title": "比较一般公共预算、政府性基金预算、转移支付、债务还本付息和刚性支出，明确统计口径。"
+        },
+        {
+         "title": "财政收入、综合财力、可自由安排财力和企业可收到的钱分别是什么？"
+        },
+        {
+         "title": "政府应收款回收的合同、预算、历史支付和未来安排怎样互相印证？"
+        }
+       ]
+      },
+      {
+       "title": "M04.2 区域产业基础",
+       "children": [
+        {
+         "title": "拆产业链、龙头、配套、人才、能源、物流、土地和研发条件；从“有产业规划”追到“有真实需求”。"
+        },
+        {
+         "title": "区分产业规模大、产业利润高、适合地方培育和适合集团投资，四者为何不等同？"
+        },
+        {
+         "title": "研究本地企业真正缺的是资本、订单、空间、技术、管理还是渠道；不同缺口需要什么工具？"
+        }
+       ]
+      },
+      {
+       "title": "M04.3 市属国资版图",
+       "children": [
+        {
+         "title": "梳理本市城投、交投、产投、资本运营、园区、水务、文旅等主体的定位、资产和功能重叠。"
+        },
+        {
+         "title": "哪些资产由企业拥有，哪些仅被委托管理；哪些资源属于其他层级或部门，不能假定可划入？"
+        },
+        {
+         "title": "集团为什么承担这项任务，有无替代主体，是否正在重复建设能力？"
+        }
+       ]
+      },
+      {
+       "title": "M04.4 股东任务与经营承诺",
+       "children": [
+        {
+         "title": "把股东要求分成公共服务、投资回报、产业培育、重大专项和历史包袱，逐项明确主体与时间。"
+        },
+        {
+         "title": "每项任务有无成本补偿、资源条件和考核安排；多目标冲突时谁有权调整？"
+        },
+        {
+         "title": "区分口头期待、会议纪要、正式批复、章程权责和已签合同，识别约束强度。"
+        }
+       ]
+      },
+      {
+       "title": "M04.5 利益相关方与行为动机",
+       "children": [
+        {
+         "title": "政府部门、出资人、总部、原平台、子公司、债权人、员工和合作方各自会失去或得到什么？"
+        },
+        {
+         "title": "资金统筹、资产划转、人事调整和收入分配会改变哪些既有利益？"
+        },
+        {
+         "title": "哪些阻力来自信息、能力或不信任，哪些来自目标和利益确实不一致？"
+        }
+       ]
+      },
+      {
+       "title": "M04.6 选择同类而非只选名企",
+       "children": [
+        {
+         "title": "按城市能级、财政条件、资产结构、债务压力、产业基础、授权和团队等条件建立可比组。"
+        },
+        {
+         "title": "区分省级、直辖市、省会、普通地级市、区县及园区，不按行政称谓直接认定可复制程度。"
+        },
+        {
+         "title": "选一个领先案例、一个条件相近案例、一个受挫或收缩案例作三角比较。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：市级预决算、统计公报、产业规划、国资布局文件、监管企业名录、政府采购和企业披露。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：城市画像、国资版图、股东任务账、利益相关方图、可比对象筛选表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能解释这座城市需要集团解决什么问题，哪些任务应由其他主体承担，哪些研究结论不能跨城市移植。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M05｜企业家底：读懂资产、债务、利润和现金",
+     "children": [
+      {
+       "title": "M05.1 先处理报表范围",
+       "children": [
+        {
+         "title": "识别母公司、合并集团、板块和项目层级；集团账上有现金为什么不等于总部可调用？"
+        },
+        {
+         "title": "查合并范围变化、关联交易抵销、少数股东权益、受限资产和审计意见。"
+        },
+        {
+         "title": "建立连续年度可比口径，避免把并表或资产划入造成的增长当成经营改善。"
+        }
+       ]
+      },
+      {
+       "title": "M05.2 资产从“账面值”拆到“可用性”",
+       "children": [
+        {
+         "title": "对土地、道路、管网、房产、园区、应收款、存货、在建工程、股权等逐项查权属、用途、估值、抵押和变现条件。"
+        },
+        {
+         "title": "区分能经营、能收费、能分红、能出售、能抵押和能形成自由现金，哪些同时成立？"
+        },
+        {
+         "title": "公益性资产、低效资产、权属不清资产分别怎样处理；剥离是否涉及债权人、公共责任和持续服务？"
+        }
+       ]
+      },
+      {
+       "title": "M05.3 债务从“总额”拆到“偿付责任”",
+       "children": [
+        {
+         "title": "银行借款、债券、非标、租赁、应付款、担保和基金出资承诺分别是谁的责任、何时支付？"
+        },
+        {
+         "title": "查利率、增信、用途、提前到期、交叉违约、资产处置限制和变更控制条款。"
+        },
+        {
+         "title": "区分政府债务属性认定与企业会计负债识别；不能仅凭债务名称推断是否可以置换或由财政承担。"
+        }
+       ]
+      },
+      {
+       "title": "M05.4 利润的来源与质量",
+       "children": [
+        {
+         "title": "按业务拆收入、毛利、费用、投资收益、补贴、公允价值变动和处置收益。"
+        },
+        {
+         "title": "查贸易和供应链业务的实际控制、总额净额口径、资金占用和风险，不能只用规模证明市场化。"
+        },
+        {
+         "title": "区分应计利润、一次性利润、可持续利润和现金回收，查“账面盈利却缺钱”的来源。"
+        }
+       ]
+      },
+      {
+       "title": "M05.5 现金的期限与支配权",
+       "children": [
+        {
+         "title": "区分期末现金、受限现金、可调度现金、未使用授信、已落实且可提款融资。"
+        },
+        {
+         "title": "编制短期滚动现金和中期现金预测，列运营、税费、利息、本金、刚性建设、出资承诺和最低运行储备。"
+        },
+        {
+         "title": "区分确定、条件性、预测性流入，做回款延迟、资产处置延迟和续贷减少的情景分析。"
+        }
+       ]
+      },
+      {
+       "title": "M05.6 债务与新投资能否共存",
+       "children": [
+        {
+         "title": "从每期资金余额倒算可承受的新增投入，核对资金用途、期限和偿还能力。"
+        },
+        {
+         "title": "长周期股权投资为什么不能只拿当年利润或资产总额决定额度？"
+        },
+        {
+         "title": "研究延期、分期、缩小规模、引入伙伴和暂缓投资的代价，明确谁有权选择。"
+        }
+       ]
+      },
+      {
+       "title": "M05.7 把三张表连起来",
+       "children": [
+        {
+         "title": "同一项重组、资产处置或股权投资会怎样影响资产负债表、利润表和现金流量表？"
+        },
+        {
+         "title": "企业估值上升但没有退出，利润和现金分别可能怎样变化？"
+        },
+        {
+         "title": "用附录C的教学练习检验计算，再用真实披露重做一遍，记录仍无法确认的事项。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：三至五年审计报告与附注、募集说明书、评级报告；客户授权取得的资产台账、合同和资金计划。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：产权与并表图、资产底图、债务到期表、利润质量桥、现金缺口表、投资承受能力说明。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能从大资产、大收入的集团里识别真正可动用的现金和主要风险；每个数字可追到主体、期间与口径。",
+       "tag": "过关"
+      }
+     ]
+    }
+   ],
+   "color": "#2E9E8F"
+  },
+  {
+   "title": "C｜判断怎么转",
+   "children": [
+    {
+     "title": "M06｜目标与路径：先判断该往哪里转",
+     "children": [
+      {
+       "title": "M06.1 建立转型目标而非口号",
+       "children": [
+        {
+         "title": "将债务风险、公共服务、经营现金、产业能力、资本回报和组织能力分层，注明优先级。"
+        },
+        {
+         "title": "哪些是底线约束，哪些是阶段目标，哪些是长期愿景；目标冲突时由谁裁决？"
+        },
+        {
+         "title": "为每项目标定义基线、变化方向、衡量口径、资源和完成证据，避免只写资产与评级目标。"
+        }
+       ]
+      },
+      {
+       "title": "M06.2 做路径比较",
+       "children": [
+        {
+         "title": "分别比较城市运营、公用事业、园区服务、产业经营、股权投资、资本运营和先稳经营处置存量。"
+        },
+        {
+         "title": "每条路径要列客户、支付方、投入、现金周期、团队要求、风险、政策条件和协同。"
+        },
+        {
+         "title": "区分当前可做、补齐条件后可做、长期不适合做，不把组合发展理解为每条路径都做。"
+        }
+       ]
+      },
+      {
+       "title": "M06.3 给业务分角色",
+       "children": [
+        {
+         "title": "公共保障业务、现金贡献业务、能力培育业务和拟退出业务怎样区分？"
+        },
+        {
+         "title": "不同角色的资金投入、经营目标和容忍周期怎样设，能否分别核算？"
+        },
+        {
+         "title": "现金贡献业务支撑新业务要通过什么合法、可持续的资金路径，不能只画循环箭头。"
+        }
+       ]
+      },
+      {
+       "title": "M06.4 产业方向怎样选择",
+       "children": [
+        {
+         "title": "从区域需求和企业能力出发筛赛道，再研究产业链环节、商业模式和可投资对象。"
+        },
+        {
+         "title": "区分本地产业值得扶持与集团投资值得做；公共收益和企业回报分别由谁承担？"
+        },
+        {
+         "title": "设计“为什么不投另两个方向”的比较，避免用国家鼓励产业名单代替选择依据。"
+        }
+       ]
+      },
+      {
+       "title": "M06.5 自建、合作、并购还是委托",
+       "children": [
+        {
+         "title": "对同一能力缺口比较自建团队、引入管理人、参股合作、收购运营企业和委托服务。"
+        },
+        {
+         "title": "比较取得能力的时间、成本、控制程度、风险、退出难度和依赖关系。"
+        },
+        {
+         "title": "合作方案如何避免“名为合作、实为自身承担全部风险”？"
+        }
+       ]
+      },
+      {
+       "title": "M06.6 阶段与启动条件",
+       "children": [
+        {
+         "title": "分开债务处置、经营改善、能力建设、组织改革和新投资的进度，判断哪些可以同时开展。"
+        },
+        {
+         "title": "什么条件未满足时暂不扩大投入，哪些低成本研究和能力准备仍可推进？"
+        },
+        {
+         "title": "设计推进、调整、暂停和退出的判断条件；不套用所有企业相同的月份表。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：M03—M05成果、集团战略、股东任务、业务计划、项目储备和能力评估。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：目标树、路径比较表、业务组合图、能力缺口表、阶段条件表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能提出至少两条可比较路径，解释推荐顺序、必要条件和机会成本，并能说明何时应改变推荐。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M07｜经营业务：弄清集团靠什么持续取得现金",
+     "children": [
+      {
+       "title": "M07.1 城建代建与工程业务",
+       "children": [
+        {
+         "title": "委托、施工、代建、投资和融资责任分别由谁承担，收入确认和结算回款如何发生？"
+        },
+        {
+         "title": "查建设成本、管理费、融资成本、审计结算和回款周期，区分“有工程”和“有利润”。"
+        },
+        {
+         "title": "转型后哪些存量项目必须继续履行，怎样避免停止旧模式时留下无资金项目？"
+        }
+       ]
+      },
+      {
+       "title": "M07.2 园区与产业载体",
+       "children": [
+        {
+         "title": "从拿地、建设、招商、租售、物业到企业服务复原商业模式，谁为每项服务付费？"
+        },
+        {
+         "title": "出租率、实际收缴、租金、维护、融资和再投资如何共同决定现金回报？"
+        },
+        {
+         "title": "产业招商、载体出租和股权投资之间有无真实协同，是否反而形成低租金和高投入负担？"
+        }
+       ]
+      },
+      {
+       "title": "M07.3 公用事业与城市服务",
+       "children": [
+        {
+         "title": "水、热、污水、停车、环卫等业务分别是什么定价、授权和支付机制，不能假定都稳定盈利。"
+        },
+        {
+         "title": "资本投入、折旧、维修、收费收缴、补偿和应收如何影响利润与现金？"
+        },
+        {
+         "title": "哪些改善来自运营效率，哪些必须靠价格或合同安排调整，企业自身能控制多少？"
+        }
+       ]
+      },
+      {
+       "title": "M07.4 资源、能源与存量资产经营",
+       "children": [
+        {
+         "title": "分清资源所有权、经营权、许可、交易和收益权，研究取得条件与合规成本。"
+        },
+        {
+         "title": "比较持有经营、租赁、改造、合作、出售和证券化的现金及长期收益。"
+        },
+        {
+         "title": "注入资源后还需要哪些经营能力和资本投入，防止把“拿到资源”等同于“能赚钱”。"
+        }
+       ]
+      },
+      {
+       "title": "M07.5 产业经营、并购与供应链",
+       "children": [
+        {
+         "title": "控股实业企业怎样形成产品、客户、毛利、周转和研发能力，与少数股权投资有什么不同？"
+        },
+        {
+         "title": "并购取得的利润、负债、商誉、或有责任和管理难度怎样进入集团？"
+        },
+        {
+         "title": "贸易业务需要验证哪些真实交易、信用和货权条件，哪些收入增长伴随更大的现金风险？"
+        }
+       ]
+      },
+      {
+       "title": "M07.6 政府与企业之间的交易",
+       "children": [
+        {
+         "title": "出资、补贴、购买服务、委托建设和专项资金分别凭什么文件或合同，如何预算和结算？"
+        },
+        {
+         "title": "哪些补偿与公共任务对应，哪些只是临时性支持，能否作为持续收入预测？"
+        },
+        {
+         "title": "研究“政府有需求但支付不稳定”的业务应如何评估，不能将政府作为客户简单视为坏或好。"
+        }
+       ]
+      },
+      {
+       "title": "M07.7 用同一张业务账比较各板块",
+       "children": [
+        {
+         "title": "对每项业务填客户、支付方、定价、成本、利润、现金、资本开支、风险和关键能力。"
+        },
+        {
+         "title": "区分已签收入、可回收收入、实际回款、经营自由现金，建立从业务量到现金的测算。"
+        },
+        {
+         "title": "找出最值得改善的业务动作：收缴、定价、周转、减亏、维护或退出，测算改善幅度和代价。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：业务合同、项目台账、板块经营数据、价格或特许经营文件、客户与运营访谈。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：至少三类业务的机制卡、单项目经济账、板块比较表、经营改善机会表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能讲清收入如何变成现金、谁掌握关键变量，不能只按主营业务名称判断好坏。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M08｜产业投资与基金：把募、投、管、退拆开研究",
+     "children": [
+      {
+       "title": "M08.1 工具和资金性质先行",
+       "children": [
+        {
+         "title": "比较直投、基金LP出资、管理基金、控股并购和招商服务，分别赚什么钱、承担什么责任？"
+        },
+        {
+         "title": "穿透资金来源和用途约束，识别财政资金、受托资金和企业资金的边界。"
+        },
+        {
+         "title": "为什么集团、管理人、基金和被投企业之间的现金不能直接当作集团自由现金？"
+        }
+       ]
+      },
+      {
+       "title": "M08.2 是否需要基金",
+       "children": [
+        {
+         "title": "先问设立目的、项目来源、资金匹配和管理能力，再比较参投已有基金与自设基金。"
+        },
+        {
+         "title": "基金规模、实缴进度、期限、费用、决策权和退出安排如何影响实际效果？"
+        },
+        {
+         "title": "无基金是否仍能实现产业目标；有基金是否反而增加资金闲置、重复收费和治理层次？"
+        }
+       ]
+      },
+      {
+       "title": "M08.3 募资与管理人选择",
+       "children": [
+        {
+         "title": "LP为何出资，政府、国企、金融机构和市场化资本的收益与期限要求有什么差别？"
+        },
+        {
+         "title": "查GP或管理人的历史业绩、团队稳定性、真实退出、利益冲突和投后能力。"
+        },
+        {
+         "title": "区分管理规模、认缴规模、可投资金额、实投金额和实际带动社会资本，统一统计口径。"
+        }
+       ]
+      },
+      {
+       "title": "M08.4 项目筛选、尽调与估值",
+       "children": [
+        {
+         "title": "将产业研究、项目来源、初筛、技术市场财务法律尽调、估值和风险审查逐步连起来。"
+        },
+        {
+         "title": "每阶段什么证据足以继续，什么问题必须补查，什么问题应否决？"
+        },
+        {
+         "title": "研究订单、技术成熟度、客户集中、资金消耗、关联交易、估值假设和退出买方，避免以赛道热度代替判断。"
+        }
+       ]
+      },
+      {
+       "title": "M08.5 投决与协议",
+       "children": [
+        {
+         "title": "核对股东、董事会、经理层、投委会、基金合伙协议各自权限；不能预设所有投委会都只有咨询权或都有最终决定权。"
+        },
+        {
+         "title": "研究出资条件、分期、治理权、反稀释、回购、优先权等条款的作用、约束和可执行性。"
+        },
+        {
+         "title": "招商谈判、专业判断和公司治理程序如何衔接，谁记录反对意见和剩余风险？"
+        }
+       ]
+      },
+      {
+       "title": "M08.6 投后管理与风险处置",
+       "children": [
+        {
+         "title": "分别研究参股与控股企业的信息权、董事履职、经营监测、资源服务和重大事项处理。"
+        },
+        {
+         "title": "追加投资的依据是什么，怎样区分合理续投与为掩盖失败不断追加？"
+        },
+        {
+         "title": "经营不达预期、估值下调、违约和控制权变化如何触发分级处置与责任记录？"
+        }
+       ]
+      },
+      {
+       "title": "M08.7 退出与组合评价",
+       "children": [
+        {
+         "title": "比较股权转让、并购、上市后减持、回购、基金份额转让和清算，逐项查条件、买方、时间、成本和国资程序。"
+        },
+        {
+         "title": "REITs针对符合条件的基础设施等资产安排，不能当成一般未上市科技股权的通用退出通道；S基金也不保证有买方或合理价格。"
+        },
+        {
+         "title": "研究IRR、DPI、TVPI及已实现现金，区分项目回报、基金回报、LP净回报、区域产业效果，不能相互替代。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：基金设立方案、合伙协议、管理协议、投决资料、投后报告、实际分配和退出文件。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：主体与资金图、工具选择表、一个项目全过程复原、基金经济账、退出情景和组合评价表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能回答钱从哪里来、谁有权投、靠什么赚钱、失败由谁承担、什么时候能拿回现金；不把设基金和招商落地等同投资成功。",
+       "tag": "过关"
+      }
+     ]
+    }
+   ],
+   "color": "#3A8DDE"
+  },
+  {
+   "title": "D｜设计怎么管",
+   "children": [
+    {
+     "title": "M09｜整合重组：从法律变化研究到经营融合",
+     "children": [
+      {
+       "title": "M09.1 重组要解决什么具体问题",
+       "children": [
+        {
+         "title": "是融资主体分散、功能重叠、资源碎片、成本高、治理弱还是产业能力不足？不同目标需要什么方式？"
+        },
+        {
+         "title": "比较股权划转、资产转让、吸收合并、新设集团、业务整合和托管；控制权、债务和责任如何变化？"
+        },
+        {
+         "title": "重组增加的规模能否产生经营收益，哪些只是报表变化？"
+        }
+       ]
+      },
+      {
+       "title": "M09.2 重组前摸底与交易条件",
+       "children": [
+        {
+         "title": "查资产、债务、担保、合同、税务、诉讼、人员和历史承诺，不只盘点显性资产。"
+        },
+        {
+         "title": "查债权人同意、担保变更、控制权条款、许可、少数股东和交易程序。"
+        },
+        {
+         "title": "哪些事项必须在实施前处理，哪些可设置过渡安排；如何避免“先装进来再说”？"
+        }
+       ]
+      },
+      {
+       "title": "M09.3 架构和主体压减",
+       "children": [
+        {
+         "title": "分开产权层级、法人层级、管理层级、业务链条与决策层级，不按一个数字统一处理。"
+        },
+        {
+         "title": "每个法人为什么保留，有无合同、牌照、债务隔离或业务需要；注销合并有何成本？"
+        },
+        {
+         "title": "总部、子集团、运营企业和项目公司怎样定位，哪些平台需要实质经营团队？"
+        }
+       ]
+      },
+      {
+       "title": "M09.4 业务、财务与系统承接",
+       "children": [
+        {
+         "title": "项目、客户、供应商、授权、合同、发票、银行账户和印章如何连续承接？"
+        },
+        {
+         "title": "会计政策、预算、资金、采购、人事和系统权限如何统一，哪些应允许差异？"
+        },
+        {
+         "title": "数据编码、历史余额和资产台账怎样对齐，防止新集团形成多套相互矛盾的数据。"
+        }
+       ]
+      },
+      {
+       "title": "M09.5 人员与文化融合",
+       "children": [
+        {
+         "title": "原人员身份、劳动合同、岗位、薪酬、福利和历史欠付如何盘点？"
+        },
+        {
+         "title": "冗余岗位和关键人才不足如何同时处理，负责人和团队调整怎样影响经营？"
+        },
+        {
+         "title": "统一制度的过渡期怎样设计，如何处理原平台之间待遇、权力和工作习惯差异？"
+        }
+       ]
+      },
+      {
+       "title": "M09.6 整合效果的证据",
+       "children": [
+        {
+         "title": "用资金可见性、业务承接、决策时效、风险覆盖、成本和经营效果验证融合。"
+        },
+        {
+         "title": "分开重组当期规模变化、短期一次性收益和持续经营改善；控制外部环境等替代解释。"
+        },
+        {
+         "title": "哪些整合动作没有效果，是否应调整、延后或停止，怎样记录代价？"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：改革批复、重组方案、尽调、协议、债权人材料、人员方案、系统迁移记录。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：重组前后主体图、事项依赖表、责任承接表、整合任务和过渡安排、效果核验表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能解释“合而不融”究竟发生在股权、业务、权限、系统还是人员层面，并指出可验证的下一步。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M10｜治理与集团管控：管理咨询重点之一",
+     "children": [
+      {
+       "title": "M10.1 从决策主体而非组织框图开始",
+       "children": [
+        {
+         "title": "梳理党委、出资人或股东会、董事会、经理层、专门委员会和职能部门的职责与运行依据。"
+        },
+        {
+         "title": "研究前置研究、审议决定、审核、备案、执行与监督的区别；同一事项怎样衔接？"
+        },
+        {
+         "title": "查本企业实际设置的监督机构和审计委员会安排，按现行法律和章程核对，不能照抄旧组织模板。"
+        }
+       ]
+      },
+      {
+       "title": "M10.2 总部为什么存在",
+       "children": [
+        {
+         "title": "总部创造什么价值：战略、资本配置、共享服务、风险监督、专业支持，分别如何验证？"
+        },
+        {
+         "title": "哪些应集中，哪些应留在业务端；总部增加部门会否增加流程但没有增加能力？"
+        },
+        {
+         "title": "总部自身怎么被考核，如何避免只考核子公司、没有总部责任？"
+        }
+       ]
+      },
+      {
+       "title": "M10.3 子企业应如何分类",
+       "children": [
+        {
+         "title": "按功能、业务规律、控制权、成熟度、风险、能力和资金依赖建立分类，而非只按行业名称。"
+        },
+        {
+         "title": "公益任务企业、现金业务、投资管理人、控股实业和少数参股企业应采取什么不同治理方式？"
+        },
+        {
+         "title": "对同一家混合业务企业，能否按事项分类授权，而非给一个笼统管控标签？"
+        }
+       ]
+      },
+      {
+       "title": "M10.4 权责清单怎样真正形成",
+       "children": [
+        {
+         "title": "至少选择投资、融资、担保、资产处置、采购、用人、薪酬和重大合同逐项复原。"
+        },
+        {
+         "title": "明确提出、专业审核、合规审查、决策、执行、监督和留痕的主体，避免一个“审批”覆盖所有动作。"
+        },
+        {
+         "title": "额度、主业内外、预算内外、关联交易、风险程度和紧急事项如何共同决定权限？"
+        }
+       ]
+      },
+      {
+       "title": "M10.5 授权与监督怎样配套",
+       "children": [
+        {
+         "title": "授权来自谁、有无权源、承接方是否具备能力、是否能再授权、何时收回？"
+        },
+        {
+         "title": "配套信息报告、负面清单、审计抽查、例外升级和动态评价，避免只有放权或只有收权。"
+        },
+        {
+         "title": "研究财务人员委派、董事派出和总部直接审批的不同作用，是否出现多头指挥或责任悬空？"
+        }
+       ]
+      },
+      {
+       "title": "M10.6 复原一个真实决策流程",
+       "children": [
+        {
+         "title": "用有日期的材料还原一笔投资或采购，计算等待、重复审核、补材料和返工发生在哪里。"
+        },
+        {
+         "title": "慢是由于权限层级、材料质量、能力不足、目标冲突还是规避责任？不能直接归因“管得太细”。"
+        },
+        {
+         "title": "比较在加强前期准备、下放权限、设置时限和优化审查之间的选择及副作用。"
+        }
+       ]
+      },
+      {
+       "title": "M10.7 控股、参股与基金治理",
+       "children": [
+        {
+         "title": "母公司直接管理、依法通过董事会行权、股东协议约定权利，分别适用于什么关系？"
+        },
+        {
+         "title": "派出董事对所任职公司的责任、报告义务与集团要求如何协调？"
+        },
+        {
+         "title": "对外部GP和少数参股项目，没有直接行政命令权时靠什么保护权益？"
+        }
+       ]
+      },
+      {
+       "title": "M10.8 管控常见症状的多因诊断",
+       "children": [
+        {
+         "title": "决策慢：可能是权限不清、专业能力不足、资料不足、反复变化或有权主体不愿决定。"
+        },
+        {
+         "title": "总部强而子公司弱：可能是确有高风险，也可能是抽走能力与权限后再要求经营结果。"
+        },
+        {
+         "title": "子公司不报信息：可能是口径混乱、系统缺失、激励失配或故意隐瞒；分别找什么证据？"
+        }
+       ]
+      },
+      {
+       "title": "M10.9 管控方案的验收",
+       "children": [
+        {
+         "title": "组织图、章程、议事规则、权责清单、流程、岗位、系统权限是否一致？"
+        },
+        {
+         "title": "用一笔日常事项和一笔重大例外事项试走流程，看是否有人能决定、有人能执行和追责。"
+        },
+        {
+         "title": "评价决策质量、响应速度和风险变化，不能用制度数量判断管控有效。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：章程、议事规则、授权清单、总部职责、实际审批记录、董事履职材料和多层级访谈。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：治理关系图、管控分类表、事项权责表、流程复原图、授权监督配套和试运行记录。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：面对“审批太慢”能提出至少三种原因并区分证据；设计一项授权时能同时说明权源、条件、监督和收回机制。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M11｜绩效考核：管理咨询重点之二",
+     "children": [
+      {
+       "title": "M11.1 把五层考核对象拆开",
+       "children": [
+        {
+         "title": "分开出资人考核集团、集团考核子公司、董事会考核经理层、部门与岗位考核、基金及管理人评价。"
+        },
+        {
+         "title": "外部考核、企业经营评价、干部评价、薪酬兑现是否用同一结果，哪些可以分开？"
+        },
+        {
+         "title": "先明确评价对象、用途、周期和决策者，再讨论指标。"
+        }
+       ]
+      },
+      {
+       "title": "M11.2 从任务与业务推导指标",
+       "children": [
+        {
+         "title": "每项股东任务如何落到业务目标和责任主体，未落实资源的任务怎样处理？"
+        },
+        {
+         "title": "对经营、公益、招商、投资和培育业务分别比较结果、过程、能力建设和风险指标。"
+        },
+        {
+         "title": "同一子公司多目标并存时怎样分开核算和计分，避免一个利润指标吞掉其他责任？"
+        }
+       ]
+      },
+      {
+       "title": "M11.3 周期错配与阶段评价",
+       "children": [
+        {
+         "title": "长周期投资可以怎样做年度尽职过程评价、阶段里程碑和组合或全生命周期效果评价？"
+        },
+        {
+         "title": "区分年度合规与投向评价、年度经营考核、任期考核和最终收益，不能把长周期理解成年度无需检查。"
+        },
+        {
+         "title": "人员任期短于项目周期时，如何记录贡献、追踪责任并防止换届后责任断裂？"
+        }
+       ]
+      },
+      {
+       "title": "M11.4 指标口径与可控性",
+       "children": [
+        {
+         "title": "对利润、回款、投资收益、招商落地、资产盘活逐项定义分子分母、时间、主体、证据和确认人。"
+        },
+        {
+         "title": "重组并表、补贴、估值、历史包袱和政策性任务如何识别并决定是否调整？"
+        },
+        {
+         "title": "集团或外部因素造成的结果，能否全部归责于子公司或个人？"
+        }
+       ]
+      },
+      {
+       "title": "M11.5 目标值与计分方式",
+       "children": [
+        {
+         "title": "比较历史基线、预算、同类、资源条件和业务成熟度，怎样形成可协商且有挑战的目标？"
+        },
+        {
+         "title": "权重、门槛、分段、封顶、扣分、否决和加分各会诱导什么行为？"
+        },
+        {
+         "title": "不直接拍“利润40%、招商30%”等通用权重；先检验目标冲突和数据质量。"
+        }
+       ]
+      },
+      {
+       "title": "M11.6 总部部门与协同责任",
+       "children": [
+        {
+         "title": "财务、战略、投资、风控和人力部门分别服务什么结果，不能只考工作量或材料数量。"
+        },
+        {
+         "title": "跨部门事项怎样设置主责、协同和共同结果，避免相互把责任推给别人。"
+        },
+        {
+         "title": "考核结果如何进入经营复盘、资源调整、岗位调整和薪酬，而非年末打一次分？"
+        }
+       ]
+      },
+      {
+       "title": "M11.7 投资与基金考核的特殊性",
+       "children": [
+        {
+         "title": "分开财务回报、政策效益、产业协同、尽职过程和风险纪律；查各类资金适用规则。"
+        },
+        {
+         "title": "区分未实现账面增值、实际分配、真实退出及招商项目的最终经营效果。"
+        },
+        {
+         "title": "研究正常风险、失职违规和可免责情形的证据，不能用“投资亏损”直接判断是否失职。"
+        }
+       ]
+      },
+      {
+       "title": "M11.8 防止指标诱导失真",
+       "children": [
+        {
+         "title": "考营收是否诱导低毛利贸易，考投放是否诱导突击投资，考签约是否诱导无效项目？"
+        },
+        {
+         "title": "考回款是否诱导短期折价，考退出是否诱导过早出售，考利润是否诱导少维护或不投早期？"
+        },
+        {
+         "title": "设计交叉校验、质量条件、后续追踪和结果追溯，识别制度本身制造的问题。"
+        }
+       ]
+      },
+      {
+       "title": "M11.9 考核落地与争议处理",
+       "children": [
+        {
+         "title": "明确目标制定、过程反馈、调整、数据核验、述职、结果审议、申诉和兑现程序。"
+        },
+        {
+         "title": "新旧制度怎样衔接，能否先影子考核，检查数据可得性和激励后果？"
+        },
+        {
+         "title": "同样预算下模拟好、中、差三种结果，看奖惩是否符合预期，有无不可解释差异。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：外部责任书、集团与子公司考核办法、历史得分、经营预算、原始数据、薪酬兑现和申诉记录。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：考核对象关系图、分类指标库、指标字典、目标测算、情景模拟、运行与纠偏流程。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能解释为什么用这个指标、谁能影响它、如何确认、何时兑现、会诱导什么行为；先完成三类子公司的差异化试算。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M12｜薪酬、人才与激励：管理咨询重点之三",
+     "children": [
+      {
+       "title": "M12.1 先识别人员与政策身份",
+       "children": [
+        {
+         "title": "谁是组织任命负责人、市场化选聘人员、职业经理人、普通员工、借调或派遣人员？"
+        },
+        {
+         "title": "人员劳动关系、任职关系、薪酬支付主体和考核主体是否一致，跨企业兼职如何处理？"
+        },
+        {
+         "title": "逐类查负责人薪酬、工资总额、契约化和激励工具的适用条件。"
+        }
+       ]
+      },
+      {
+       "title": "M12.2 岗位与能力的基础工程",
+       "children": [
+        {
+         "title": "按实际业务确定岗位职责、人员数量、关键能力与管理专业双通道。"
+        },
+        {
+         "title": "重组后同名岗位价值是否一致，同一职级的责任和能力要求是否可比？"
+        },
+        {
+         "title": "评估原有人才可培养、需补充和可外部合作的部分，不能笼统认为原城投人员无法转型。"
+        }
+       ]
+      },
+      {
+       "title": "M12.3 工资总额如何形成",
+       "children": [
+        {
+         "title": "查本地工资总额备案或核准方式、工效联动指标、预算、调整、清算和特殊事项规则。"
+        },
+        {
+         "title": "集团预算怎样分到总部和子公司，新业务培育与兼并重组因素如何按适用规则处理？"
+        },
+        {
+         "title": "区分工资总额、人工成本、负责人薪酬、管理费和投资收益分配，不凭名称判断是否在总额之外。"
+        }
+       ]
+      },
+      {
+       "title": "M12.4 内部公平与外部竞争",
+       "children": [
+        {
+         "title": "用岗位价值、能力、贡献和市场价位比较，而非仅按行政级别或原平台待遇。"
+        },
+        {
+         "title": "不同城市、行业、机构类型和支付结构的薪酬样本是否可比，拿不到数据时保留什么判断边界？"
+        },
+        {
+         "title": "核心人才竞争力是否只能靠加工资，授权、项目质量、晋升、培养和团队机制能解决什么？"
+        }
+       ]
+      },
+      {
+       "title": "M12.5 固定、年度与递延分配",
+       "children": [
+        {
+         "title": "固定工资、岗位津贴、绩效工资、年度奖金、任期或递延奖励分别补偿什么贡献和风险？"
+        },
+        {
+         "title": "奖金池从哪里来，经营结果、工资总额与个人绩效怎样连接，谁批准？"
+        },
+        {
+         "title": "递延、追索扣回、离职、调岗和项目后续损失如何处理，保证前后任公平。"
+        }
+       ]
+      },
+      {
+       "title": "M12.6 中长期激励逐工具研究",
+       "children": [
+        {
+         "title": "跟投、超额收益分享、股权激励、员工持股、项目奖励分别针对什么对象和贡献？"
+        },
+        {
+         "title": "每项查授权、适用企业、人员、出资、风险承担、收益来源、税务、退出和审批要求。"
+        },
+        {
+         "title": "区分集团自营投资团队与外部管理人；基金取得管理费或Carry，不等于员工可自动取得同样收益。"
+        }
+       ]
+      },
+      {
+       "title": "M12.7 整合后的薪酬过渡",
+       "children": [
+        {
+         "title": "原企业高低待遇、历史津贴、同岗差异和承诺如何核实，哪些属于必须履行的权利义务？"
+        },
+        {
+         "title": "比较一步统一、分阶段接轨、存量保留与增量调整的成本、激励和公平影响。"
+        },
+        {
+         "title": "如何听取意见、履行必要程序和解释个体变化，避免制度设计完成后无法实施？"
+        }
+       ]
+      },
+      {
+       "title": "M12.8 人才队伍与用人机制",
+       "children": [
+        {
+         "title": "产业研究、投资、投后、经营、风控、财务和人力分别需要什么人，先补哪类能力？"
+        },
+        {
+         "title": "招聘、选聘、任期契约、考核、培训、晋升与退出怎样构成一致机制？"
+        },
+        {
+         "title": "关键岗位没有人时哪些业务应调整，哪些可以请专业机构支持但责任仍须自己承担？"
+        }
+       ]
+      },
+      {
+       "title": "M12.9 用个体和总额两条线试算",
+       "children": [
+        {
+         "title": "同时模拟工资总额、子企业预算、奖金池和典型员工收入，检查是否闭合。"
+        },
+        {
+         "title": "设置老员工、紧缺人才、负责人、投资人员和离职人员情景，核对激励与公平。"
+        },
+        {
+         "title": "没有项目退出、出现亏损、政策调整或预算收缩时，方案是否仍能执行？"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：当地政策、人员名册、岗位说明、工资总额批复、薪酬台账、劳动合同、历史制度和可比薪酬数据。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：人员分类表、岗位体系、薪酬诊断、总额与分配模型、工具适用比较、过渡和试算方案。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能说明“谁的钱、按什么权限、因什么贡献、在什么期间、以什么方式发给谁”，并能把总额和个体变化算清。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M13｜财务、风险与数据：给前述机制提供运行条件",
+     "children": [
+      {
+       "title": "M13.1 战略、预算与资本配置",
+       "children": [
+        {
+         "title": "战略项目如何进入年度计划、预算、资金安排和责任书，临时行政任务如何调整资源？"
+        },
+        {
+         "title": "公益、经营和投资任务分别核算什么成本与收益，哪些补偿和内部交易必须透明？"
+        },
+        {
+         "title": "比较资金优先级与机会成本，防止各板块分别合理但集团整体无法承受。"
+        }
+       ]
+      },
+      {
+       "title": "M13.2 资金统筹与风险隔离",
+       "children": [
+        {
+         "title": "集中管理是否有权源、合同和股东约束，哪些资金受限或不能归集？"
+        },
+        {
+         "title": "保证日常运营与集中调度如何平衡，内部借款、担保和资金占用怎样定价与授权？"
+        },
+        {
+         "title": "如何识别风险在母子公司、基金、项目之间传染，不能把集团统一管理等同于全额兜底。"
+        }
+       ]
+      },
+      {
+       "title": "M13.3 风险管理与尽职免责",
+       "children": [
+        {
+         "title": "区分流动性、投资、经营、法律、廉洁、信息和声誉风险，设对应监测与处置责任。"
+        },
+        {
+         "title": "从职责、程序、信息、专业判断和利益冲突记录研究尽职；正常风险与违规怎样区分？"
+        },
+        {
+         "title": "容错规则由谁制定、谁认定、需什么材料；不能用“有容错”代替实际可操作程序。"
+        }
+       ]
+      },
+      {
+       "title": "M13.4 监督体系的协调",
+       "children": [
+        {
+         "title": "董事监督、财务、风控、法律、内审、纪检和外部审计分别解决什么问题？"
+        },
+        {
+         "title": "哪些审查应前置，哪些应事中监测或事后检查，避免重复审批与无人负责并存。"
+        },
+        {
+         "title": "发现问题怎样整改、复核和更新制度，监督是否只停在出报告？"
+        }
+       ]
+      },
+      {
+       "title": "M13.5 统一数据与口径",
+       "children": [
+        {
+         "title": "建立组织、人员、资产、项目、合同、资金、投资和绩效的基础编码与关联。"
+        },
+        {
+         "title": "谁维护、谁确认、谁能看、谁能改，如何保留版本和追溯依据？"
+        },
+        {
+         "title": "系统建设前先明确数据与流程，不能期待上线系统自动解决权责和口径问题。"
+        }
+       ]
+      },
+      {
+       "title": "M13.6 风险情景下的联合检验",
+       "children": [
+        {
+         "title": "回款延迟、投资失败、关键人员离职、项目突增和融资收紧时，治理、预算与考核如何联动？"
+        },
+        {
+         "title": "谁触发预警、谁能暂停投入、谁调整目标和薪酬预算，信息多久能到达？"
+        },
+        {
+         "title": "通过桌面推演寻找制度接口断点，再决定系统和制度改造优先级。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：预算、资金制度、风险清单、审计整改、系统数据字典和权限。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：资本配置规则、风险责任图、数据字典、联动情景记录和整改台账。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：能把一个异常从数据发现追到决策、处理和复盘，指出制度间是否断链。",
+       "tag": "过关"
+      }
+     ]
+    }
+   ],
+   "color": "#C2578F"
+  },
+  {
+   "title": "E｜推进怎么变",
+   "children": [
+    {
+     "title": "M14｜实施与变革：研究方案怎样变成实际行为",
+     "children": [
+      {
+       "title": "M14.1 确定真正的决策链和推进责任",
+       "children": [
+        {
+         "title": "哪些事项企业可决定，哪些需出资人、政府部门、债权人或合作方同意？"
+        },
+        {
+         "title": "集团负责人、改革办公室、业务部门和外部顾问分别承担什么责任？"
+        },
+        {
+         "title": "重大冲突由谁裁决，日常问题由谁关闭，如何避免领导小组只有名称没有动作？"
+        }
+       ]
+      },
+      {
+       "title": "M14.2 把方案拆成依赖关系",
+       "children": [
+        {
+         "title": "先摸底什么、确认什么，再能调整哪些制度；哪些能力建设和经营改善可以同步启动？"
+        },
+        {
+         "title": "债务处置、重组、岗位、授权、考核、薪酬和系统之间有什么前置关系？"
+        },
+        {
+         "title": "根据企业约束设里程碑和完成条件，不把固定“三阶段”“三年”当作必然路径。"
+        }
+       ]
+      },
+      {
+       "title": "M14.3 设计可验证的试点",
+       "children": [
+        {
+         "title": "选择业务、数据和负责人条件较好的板块，明确试点要验证的假设。"
+        },
+        {
+         "title": "用真实事项试跑授权、影子考核与薪酬测算；试点多久取决于业务周期和证据。"
+        },
+        {
+         "title": "比较试点前后变化，记录失败、成本和副作用，不能只有成功故事。"
+        }
+       ]
+      },
+      {
+       "title": "M14.4 处理利益与行为改变",
+       "children": [
+        {
+         "title": "哪些人失去审批权、预算或待遇，哪些承担新责任，如何安排过渡和解释？"
+        },
+        {
+         "title": "抵触来自利益、能力、流程负担还是对规则不信任，分别怎样处理？"
+        },
+        {
+         "title": "培训、辅导、沟通与监督如何配合，哪些问题培训无法解决？"
+        }
+       ]
+      },
+      {
+       "title": "M14.5 审批与实施材料",
+       "children": [
+        {
+         "title": "每项方案对应哪些章程、制度、清单、合同、岗位、数据与程序，谁起草和确认？"
+        },
+        {
+         "title": "方案版本、授权依据、过渡期、例外、申诉和责任追溯怎样留存？"
+        },
+        {
+         "title": "外部律师、会计师、评估机构与咨询师在哪些环节必须分工协作？"
+        }
+       ]
+      },
+      {
+       "title": "M14.6 验收、复盘与调整",
+       "children": [
+        {
+         "title": "分开文件交付、制度开始运行、业务行为变化和经营效果，不混报完成状态。"
+        },
+        {
+         "title": "用决策时效、数据质量、现金、风险、岗位能力和任务效果形成不同期限的检查。"
+        },
+        {
+         "title": "目标未达时区分方案错误、执行不足、条件变化和证据不足，再决定修改或停止。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：项目计划、决策纪要、沟通记录、试点数据、运行问题和复盘材料。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：依赖关系图、责任任务表、里程碑、试点和过渡方案、运行验收与调整机制。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：每个动作都有负责人、输入、完成证据和下一步；能说明不推进、提前推进和中途暂停的后果。",
+       "tag": "过关"
+      }
+     ]
+    }
+   ],
+   "color": "#E8833A"
+  },
+  {
+   "title": "F｜形成咨询能力（全程穿插）",
+   "children": [
+    {
+     "title": "M15｜案例比较：从“标杆故事”走到“机制复原”",
+     "children": [
+      {
+       "title": "M15.1 按研究问题选案例",
+       "children": [
+        {
+         "title": "每案先定问题：研究资金来源、业务经营、管控、绩效、薪酬还是整合，避免全案泛读。"
+        },
+        {
+         "title": "同时配置领先案例、相似案例、未完成或受挫案例；公开资料不足不能伪造失败细节。"
+        },
+        {
+         "title": "先核对是不是由传统城投转型，不把所有产业投资机构都当作城投转型成功案例。"
+        }
+       ]
+      },
+      {
+       "title": "M15.2 首批地市级研究对象",
+       "children": [
+        {
+         "title": "合肥建投：作为上限参照，追踪城市业务、产业投资与资金来源；集团定位的官方入口见附录A。"
+        },
+        {
+         "title": "淮北建投：作为普通地市比较入口，核实旧平台沿革、经营板块、投资能力与现金；官方自述不是效果证明。"
+        },
+        {
+         "title": "洛阳国宏：作为市级重组与产业资本研究入口，先核实其形成路径及与传统城投的差异，再决定纳入何种比较组。"
+        }
+       ]
+      },
+      {
+       "title": "M15.3 保留原报告案例，但重新标注用途",
+       "children": [
+        {
+         "title": "重庆渝富、天津城投：作为直辖市机制参照，逐项研究区域、资本和授权差异。"
+        },
+        {
+         "title": "苏州工业园区与元禾：作为区域生态和多主体协作参照，不能直接画成一个集团内部现金闭环。"
+        },
+        {
+         "title": "赣州蓉江新区：作为区县重组参照，先核对统计主体和材料原文；不直接用营收增速证明改革成功。"
+        }
+       ]
+      },
+      {
+       "title": "M15.4 沿时间轴复原机制",
+       "children": [
+        {
+         "title": "建立改革前、关键动作、投入、运行、结果的时间线，把政策和外部环境同时放进去。"
+        },
+        {
+         "title": "逐笔核对资源、决策者、协议、组织、考核和资金，回答“究竟如何做到”。"
+        },
+        {
+         "title": "搜集未达预期、延迟、成本和退出，避免只选企业宣传的高光时点。"
+        }
+       ]
+      },
+      {
+       "title": "M15.5 结果与因果分开",
+       "children": [
+        {
+         "title": "分开重组并表、资本注入、市场变化、一次性收益和自身经营改善。"
+        },
+        {
+         "title": "案例说“改革带来增长”时，问有没有同口径数据、对照或过程证据；相关并不等于因果。"
+        },
+        {
+         "title": "产业项目落地、基金数量、计划投资、企业估值和现金退出分别证明什么？"
+        }
+       ]
+      },
+      {
+       "title": "M15.6 管控、绩效和薪酬的证据缺口",
+       "children": [
+        {
+         "title": "公开材料可能有制度名称，却无权责细则、评分结果、工资分配和实际运行记录。"
+        },
+        {
+         "title": "可以通过访谈、匿名制度和经授权材料补证；没有材料就标“机制待验证”。"
+        },
+        {
+         "title": "不能根据“市场化机制”四个字反推奖金比例、跟投安排或免责条款。"
+        }
+       ]
+      },
+      {
+       "title": "M15.7 找受挫与反例",
+       "children": [
+        {
+         "title": "从审计、监管处分、诉讼、减值、退出受阻和公开整改寻找可核验样本。"
+        },
+        {
+         "title": "区分单项目失败、违规事件、经营承压和整体转型失败，不作超出证据的定性。"
+        },
+        {
+         "title": "研究同一工具为何在不同条件下产生不同效果，而非给企业贴成功失败标签。"
+        }
+       ]
+      },
+      {
+       "title": "M15.8 输出迁移条件",
+       "children": [
+        {
+         "title": "每项经验分成可直接借鉴、补条件后借鉴、当前不可照搬，说明证据。"
+        },
+        {
+         "title": "指出城市、资产、资金、人才、授权和历史积累中，哪些是必要条件。"
+        },
+        {
+         "title": "把案例变成对目标企业的待验证假设，经过本企业资料检验后再形成建议。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：公司与监管披露、审计年报、募集说明书、评级、交易文件、官方改革文件及经授权访谈。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：案例资料包、机制时间线、资金与主体图、证据缺口、横向对照和迁移条件表。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：至少完成一个领先、一个相似、一个受挫或未完成案例的比较；每案能说清投入、机制、结果和未知，不能只讲故事。",
+       "tag": "过关"
+      }
+     ]
+    },
+    {
+     "title": "M16｜咨询实践与研究管理：把认知转为可重复的工作能力",
+     "children": [
+      {
+       "title": "M16.1 建立企业诊断的最小资料包",
+       "children": [
+        {
+         "title": "公开基础包：城市财政产业、企业沿革股权、三至五年财务、业务和债券披露。"
+        },
+        {
+         "title": "深度资料包：战略、任务、资产债务、预算、章程授权、考核薪酬、人员、项目流程与运行结果。"
+        },
+        {
+         "title": "按“现阶段必须有、可替代、后续补充”分级；缺资料时缩小判断范围，不填补想象中的事实。"
+        }
+       ]
+      },
+      {
+       "title": "M16.2 访谈不是收集意见，而是验证",
+       "children": [
+        {
+         "title": "对出资人、董事会、经营层、总部、子公司和员工问同一事项，比较口径差异。"
+        },
+        {
+         "title": "问最近一次实例、日期、文件、审批、执行、卡点与后果，不只问“你觉得有什么问题”。"
+        },
+        {
+         "title": "将事实、评价、诉求和建议分开记录；访谈说法也需核对，不能直接替代数据和合同。"
+        }
+       ]
+      },
+      {
+       "title": "M16.3 从症状建立假设",
+       "children": [
+        {
+         "title": "对“合而不融”“投资慢”“薪酬低”“考核不合理”各提出至少三种可区分原因。"
+        },
+        {
+         "title": "每个原因写支持证据、反证、应查对象和替代解释，按证据调整优先级。"
+        },
+        {
+         "title": "建立因果链，区分根因、放大因素和结果，不把所有问题都归为“机制不活”。"
+        }
+       ]
+      },
+      {
+       "title": "M16.4 从原因比较方案",
+       "children": [
+        {
+         "title": "每个关键问题至少比较两个可行方案和维持现状，列成本、约束、收益、风险与利益变化。"
+        },
+        {
+         "title": "明确哪些可由企业决定，哪些需政策、股东或外部专业确认。"
+        },
+        {
+         "title": "给推荐顺序和条件，避免把全面重组、设基金、加薪等当作默认动作。"
+        }
+       ]
+      },
+      {
+       "title": "M16.5 八项练习形成能力链",
+       "children": [
+        {
+         "title": "企业身份与资金图 → 财务现金诊断 → 业务机制卡 → 路径比较。"
+        },
+        {
+         "title": "一个事项的权责流程 → 三类子公司的考核 → 总额与个人薪酬联动 → 综合诊断与实施安排。"
+        },
+        {
+         "title": "每项先教学模拟再公开案例，最后用经授权企业材料验证；模拟结果不得写成客户实践成果。"
+        }
+       ]
+      },
+      {
+       "title": "M16.6 形成可复用的知识卡",
+       "children": [
+        {
+         "title": "概念卡、政策卡、业务机制卡、问题诊断卡、方案工具卡、案例卡和实施复盘卡互相链接。"
+        },
+        {
+         "title": "每卡标来源、日期、主体、事实或推断、适用条件、反例、待核实事项和关联模块。"
+        },
+        {
+         "title": "新证据出现时更新结论与版本，不只把资料越堆越多。"
+        }
+       ]
+      },
+      {
+       "title": "M16.7 给智能体派可验收任务",
+       "children": [
+        {
+         "title": "一次处理明确问题、限定主体与时期、要求原始资料、指定输出和未知边界，模板见附录E。"
+        },
+        {
+         "title": "概念解释、政策核验、案例机制和方案设计按前后依赖衔接；不能让多个智能体重复写同一份综述再拼接。"
+        },
+        {
+         "title": "真正独立的资料搜集或不同案例可并行，政策适用、事实汇总和最终诊断需统一口径，由研究负责人核验。"
+        }
+       ]
+      },
+      {
+       "title": "M16.8 研究质量与阶段验收",
+       "children": [
+        {
+         "title": "用能否解释、算清、排除错误解释、比较方案、设计运行和验证效果判断进展。"
+        },
+        {
+         "title": "关键结论必须能追源，并写适用条件与未知；未取得原始资料的案例不升级为已验证经验。"
+        },
+        {
+         "title": "桌面研究可形成诊断假设和方法能力，形成实际咨询能力还需真实访谈、资料、实施和效果复盘。"
+        }
+       ]
+      },
+      {
+       "title": "资料入口：前述模块全部成果、研究日志、练习、访谈和项目运行记录。",
+       "tag": "资料"
+      },
+      {
+       "title": "必须产出：资料清单、访谈提纲、诊断证据链、备选方案、八项练习、知识卡库和完整项目复盘。",
+       "tag": "产出"
+      },
+      {
+       "title": "过关标准：面对陌生企业，能提出有依据且可验证的诊断，知道下一步查什么、为什么查、谁来决定，以及方案怎样运行。",
+       "tag": "过关"
+      }
+     ]
+    }
+   ],
+   "color": "#6B7A8C"
+  }
+ ]
+};
+
+const BRANCHES = [
+ {
+  "i": 0,
+  "title": "A｜认识对象",
+  "color": "#5B6BD6",
+  "subs": 3,
+  "leaves": 66
+ },
+ {
+  "i": 1,
+  "title": "B｜看清家底",
+  "color": "#2E9E8F",
+  "subs": 2,
+  "leaves": 45
+ },
+ {
+  "i": 2,
+  "title": "C｜判断怎么转",
+  "color": "#3A8DDE",
+  "subs": 3,
+  "leaves": 69
+ },
+ {
+  "i": 3,
+  "title": "D｜设计怎么管",
+  "color": "#C2578F",
+  "subs": 5,
+  "leaves": 132
+ },
+ {
+  "i": 4,
+  "title": "E｜推进怎么变",
+  "color": "#E8833A",
+  "subs": 1,
+  "leaves": 21
+ },
+ {
+  "i": 5,
+  "title": "F｜形成咨询能力（全程穿插）",
+  "color": "#6B7A8C",
+  "subs": 2,
+  "leaves": 54
+ }
+];
+
+const MODMAP = [
+ {
+  "branch": "A｜认识对象",
+  "color": "#5B6BD6",
+  "code": "M01",
+  "title": "M01｜概念与主体：先能准确说清在研究谁",
+  "out": "必须产出：术语卡、主体关系图、企业身份卡、六种“完成”对照表。",
+  "pass": "过关标准：拿到一家陌生企业的简介，能指出已知身份、不能据此判断的身份，以及需要补查的材料；用白话解释上述术语而不依赖术语互相解释。",
+  "subs": 9,
+  "leaves": 21
+ },
+ {
+  "branch": "A｜认识对象",
+  "color": "#5B6BD6",
+  "code": "M02",
+  "title": "M02｜历史与底层逻辑：先理解旧模式如何运转",
+  "out": "必须产出：历史时间轴、旧模式资金图、转型驱动的因果图、利益相关方目标表。",
+  "pass": "过关标准：能用一笔项目的运行过程解释为什么要变、哪里必须变、什么不能一刀切，而非只复述宏观趋势。",
+  "subs": 9,
+  "leaves": 21
+ },
+ {
+  "branch": "A｜认识对象",
+  "color": "#5B6BD6",
+  "code": "M03",
+  "title": "M03｜政策适用：从“有哪些文件”走到“这件事该怎么判断”",
+  "out": "必须产出：政策台账、适用矩阵、待核实口径表、典型事项政策判断卡。首批来源见附录A。",
+  "pass": "过关标准：面对“能否出资设基金”“能否给团队超额收益分享”等具体问题，能列出适用判断、必要前提和缺失信息，而非只贴政策标题。",
+  "subs": 10,
+  "leaves": 24
+ },
+ {
+  "branch": "B｜看清家底",
+  "color": "#2E9E8F",
+  "code": "M04",
+  "title": "M04｜区域与股东：弄清这家企业为何存在",
+  "out": "必须产出：城市画像、国资版图、股东任务账、利益相关方图、可比对象筛选表。",
+  "pass": "过关标准：能解释这座城市需要集团解决什么问题，哪些任务应由其他主体承担，哪些研究结论不能跨城市移植。",
+  "subs": 9,
+  "leaves": 21
+ },
+ {
+  "branch": "B｜看清家底",
+  "color": "#2E9E8F",
+  "code": "M05",
+  "title": "M05｜企业家底：读懂资产、债务、利润和现金",
+  "out": "必须产出：产权与并表图、资产底图、债务到期表、利润质量桥、现金缺口表、投资承受能力说明。",
+  "pass": "过关标准：能从大资产、大收入的集团里识别真正可动用的现金和主要风险；每个数字可追到主体、期间与口径。",
+  "subs": 10,
+  "leaves": 24
+ },
+ {
+  "branch": "C｜判断怎么转",
+  "color": "#3A8DDE",
+  "code": "M06",
+  "title": "M06｜目标与路径：先判断该往哪里转",
+  "out": "必须产出：目标树、路径比较表、业务组合图、能力缺口表、阶段条件表。",
+  "pass": "过关标准：能提出至少两条可比较路径，解释推荐顺序、必要条件和机会成本，并能说明何时应改变推荐。",
+  "subs": 9,
+  "leaves": 21
+ },
+ {
+  "branch": "C｜判断怎么转",
+  "color": "#3A8DDE",
+  "code": "M07",
+  "title": "M07｜经营业务：弄清集团靠什么持续取得现金",
+  "out": "必须产出：至少三类业务的机制卡、单项目经济账、板块比较表、经营改善机会表。",
+  "pass": "过关标准：能讲清收入如何变成现金、谁掌握关键变量，不能只按主营业务名称判断好坏。",
+  "subs": 10,
+  "leaves": 24
+ },
+ {
+  "branch": "C｜判断怎么转",
+  "color": "#3A8DDE",
+  "code": "M08",
+  "title": "M08｜产业投资与基金：把募、投、管、退拆开研究",
+  "out": "必须产出：主体与资金图、工具选择表、一个项目全过程复原、基金经济账、退出情景和组合评价表。",
+  "pass": "过关标准：能回答钱从哪里来、谁有权投、靠什么赚钱、失败由谁承担、什么时候能拿回现金；不把设基金和招商落地等同投资成功。",
+  "subs": 10,
+  "leaves": 24
+ },
+ {
+  "branch": "D｜设计怎么管",
+  "color": "#C2578F",
+  "code": "M09",
+  "title": "M09｜整合重组：从法律变化研究到经营融合",
+  "out": "必须产出：重组前后主体图、事项依赖表、责任承接表、整合任务和过渡安排、效果核验表。",
+  "pass": "过关标准：能解释“合而不融”究竟发生在股权、业务、权限、系统还是人员层面，并指出可验证的下一步。",
+  "subs": 9,
+  "leaves": 21
+ },
+ {
+  "branch": "D｜设计怎么管",
+  "color": "#C2578F",
+  "code": "M10",
+  "title": "M10｜治理与集团管控：管理咨询重点之一",
+  "out": "必须产出：治理关系图、管控分类表、事项权责表、流程复原图、授权监督配套和试运行记录。",
+  "pass": "过关标准：面对“审批太慢”能提出至少三种原因并区分证据；设计一项授权时能同时说明权源、条件、监督和收回机制。",
+  "subs": 12,
+  "leaves": 30
+ },
+ {
+  "branch": "D｜设计怎么管",
+  "color": "#C2578F",
+  "code": "M11",
+  "title": "M11｜绩效考核：管理咨询重点之二",
+  "out": "必须产出：考核对象关系图、分类指标库、指标字典、目标测算、情景模拟、运行与纠偏流程。",
+  "pass": "过关标准：能解释为什么用这个指标、谁能影响它、如何确认、何时兑现、会诱导什么行为；先完成三类子公司的差异化试算。",
+  "subs": 12,
+  "leaves": 30
+ },
+ {
+  "branch": "D｜设计怎么管",
+  "color": "#C2578F",
+  "code": "M12",
+  "title": "M12｜薪酬、人才与激励：管理咨询重点之三",
+  "out": "必须产出：人员分类表、岗位体系、薪酬诊断、总额与分配模型、工具适用比较、过渡和试算方案。",
+  "pass": "过关标准：能说明“谁的钱、按什么权限、因什么贡献、在什么期间、以什么方式发给谁”，并能把总额和个体变化算清。",
+  "subs": 12,
+  "leaves": 30
+ },
+ {
+  "branch": "D｜设计怎么管",
+  "color": "#C2578F",
+  "code": "M13",
+  "title": "M13｜财务、风险与数据：给前述机制提供运行条件",
+  "out": "必须产出：资本配置规则、风险责任图、数据字典、联动情景记录和整改台账。",
+  "pass": "过关标准：能把一个异常从数据发现追到决策、处理和复盘，指出制度间是否断链。",
+  "subs": 9,
+  "leaves": 21
+ },
+ {
+  "branch": "E｜推进怎么变",
+  "color": "#E8833A",
+  "code": "M14",
+  "title": "M14｜实施与变革：研究方案怎样变成实际行为",
+  "out": "必须产出：依赖关系图、责任任务表、里程碑、试点和过渡方案、运行验收与调整机制。",
+  "pass": "过关标准：每个动作都有负责人、输入、完成证据和下一步；能说明不推进、提前推进和中途暂停的后果。",
+  "subs": 9,
+  "leaves": 21
+ },
+ {
+  "branch": "F｜形成咨询能力（全程穿插）",
+  "color": "#6B7A8C",
+  "code": "M15",
+  "title": "M15｜案例比较：从“标杆故事”走到“机制复原”",
+  "out": "必须产出：案例资料包、机制时间线、资金与主体图、证据缺口、横向对照和迁移条件表。",
+  "pass": "过关标准：至少完成一个领先、一个相似、一个受挫或未完成案例的比较；每案能说清投入、机制、结果和未知，不能只讲故事。",
+  "subs": 11,
+  "leaves": 27
+ },
+ {
+  "branch": "F｜形成咨询能力（全程穿插）",
+  "color": "#6B7A8C",
+  "code": "M16",
+  "title": "M16｜咨询实践与研究管理：把认知转为可重复的工作能力",
+  "out": "必须产出：资料清单、访谈提纲、诊断证据链、备选方案、八项练习、知识卡库和完整项目复盘。",
+  "pass": "过关标准：面对陌生企业，能提出有依据且可验证的诊断，知道下一步查什么、为什么查、谁来决定，以及方案怎样运行。",
+  "subs": 11,
+  "leaves": 27
+ }
+];
+
+/* =========================================================
+   常量与工具
+   ========================================================= */
+const TAGTXT = { '资料':'资料入口', '产出':'必须产出', '过关':'过关标准' };
+const TAGCLS = { '资料':'t-m', '产出':'t-o', '过关':'t-p' };
+const TREE = document.getElementById('tree');
+const MAP = document.getElementById('map');
+const WRAP = document.getElementById('mapwrap');
+const MAINEL = document.querySelector('.main');
+const DRAWER = document.getElementById('drawer');
+const IDMAP = {};          // 当前页：节点 id -> { node, el, color, depth }
+let uid = 0;
+
+/* 全量节点索引：无论当前在哪一页，都能用原始 id 找到节点（标注/高亮靠它跨页对齐） */
+const ALLNODE = {};
+(function walkAll(n, path){
+  ALLNODE[path] = n;
+  (n.children || []).forEach(function(c, i){ walkAll(c, path + '-' + i); });
+})(ROOT, 'root');
+
+/* 高亮标记：研究批次与优先级，用来跟团队对齐"先做哪几块" */
+const MARKS = [
+  { k:'首批',  c:'#D64545', d:'第一批先行开展' },
+  { k:'第二批', c:'#E08600', d:'第二批跟进' },
+  { k:'第三批', c:'#3A8DDE', d:'第三批后续' },
+  { k:'重点',  c:'#7A5AF8', d:'需要重点关注' },
+  { k:'存疑',  c:'#2E9E8F', d:'口径或边界待确认' }
+];
+let HL = {};               // 节点 id -> 标记序号
+let PAGES = [];            // 对齐页：[{ id, name, desc, marks:[标记序号] }]
+let CUR_PAGE = 'main';     // 'main' = 全景图
+
+function countAll(n){
+  let c = (n.children || []).length;
+  (n.children || []).forEach(function(x){ c += countAll(x); });
+  return c;
+}
+function countLeaves(n){
+  if (!n.children || !n.children.length) return 1;
+  let c = 0;
+  n.children.forEach(function(x){ c += countLeaves(x); });
+  return c;
+}
+
+/* =========================================================
+   渲染树
+   ========================================================= */
+function liEl(node, depth, color, idPath){
+  const li = document.createElement('li');
+  li.className = 'd' + depth;
+  const c = node.color || color;
+
+  const nd = document.createElement('div');
+  nd.className = 'node lv' + depth;
+  nd.style.setProperty('--c', c);
+  if (depth <= 1) nd.style.background = c;
+  else nd.style.borderLeftColor = c;
+  if (node.tag) { nd.classList.add('tbox', TAGCLS[node.tag]); }
+
+  const id = node._path || idPath || ('n' + (uid++));
+  nd.dataset.id = id;
+  if (node.tag) nd.dataset.tag = node.tag;
+  IDMAP[id] = { node: node, el: nd, color: c, depth: depth };
+  node._uid = id;
+
+  const nb = document.createElement('div');
+  nb.className = 'nb';
+  const nt = document.createElement('div');
+  nt.className = 'nt';
+  const tt = document.createElement('span');
+  tt.className = 'tt';
+  tt.textContent = node.title;
+  nt.appendChild(tt);
+
+  const tgs = document.createElement('span');
+  tgs.className = 'tags';
+  if (node.tag) {
+    const t = document.createElement('span');
+    t.className = 'tag ' + TAGCLS[node.tag];
+    t.textContent = node.tag;
+    tgs.appendChild(t);
+  }
+  if (depth === 1) {
+    const t2 = document.createElement('span');
+    t2.className = 'tag t-C';
+    t2.textContent = (node.children || []).length + ' 模块 / ' + countLeaves(node) + ' 问题';
+    tgs.appendChild(t2);
+  }
+  if (depth === 2) {
+    const t2 = document.createElement('span');
+    t2.className = 'tag t-C';
+    t2.style.background = '#EDEFF3'; t2.style.color = '#77808A';
+    t2.textContent = (node.children || []).length + ' 项';
+    tgs.appendChild(t2);
+  }
+  if (tgs.children.length) nt.appendChild(tgs);
+  nb.appendChild(nt);
+  nd.appendChild(nb);
+
+  if (node.children && node.children.length) {
+    const tg = document.createElement('button');
+    tg.className = 'tgl';
+    tg.type = 'button';
+    tg.textContent = '−';
+    tg.addEventListener('click', function(e){ e.stopPropagation(); setColl(li, !li.classList.contains('collapsed')); });
+    nd.appendChild(tg);
+  }
+
+  nd.addEventListener('click', function(){ openDrawer(id); });
+  nd.addEventListener('contextmenu', function(e){
+    e.preventDefault(); e.stopPropagation(); openCtx(e.clientX, e.clientY, id);
+  });
+
+  const hb = document.createElement('button');
+  hb.className = 'hbtn'; hb.type = 'button'; hb.textContent = '◉';
+  hb.title = '标高亮（右键卡片也可以）';
+  hb.addEventListener('click', function(e){ e.stopPropagation(); openHlPop(id, hb); });
+  nd.appendChild(hb);
+  li.appendChild(nd);
+
+  if (node.children && node.children.length) {
+    const ul = document.createElement('ul');
+    ul.className = 'children';
+    node.children.forEach(function(ch, i){
+      ul.appendChild(liEl(ch, depth + 1, c, ch._path || (id + '-' + i)));
+    });
+    li.appendChild(ul);
+  }
+  return li;
+}
+
+/* 首屏渲染由 renderPage() 在 boot 阶段统一完成（支持全景图与对齐页切换） */
+
+function setColl(li, on){
+  li.classList.toggle('collapsed', on);
+  const b = li.querySelector(':scope > .node > .tgl');
+  if (b) b.textContent = on ? '+' : '−';
+}
+function collapseTo(level){
+  document.querySelectorAll('li.d1, li.d2, li.d3, li.d4').forEach(function(li){
+    const mm = li.className.match(/d(\d)/);
+    if (!mm) return;
+    setColl(li, parseInt(mm[1], 10) >= level);
+  });
+}
+
+/* =========================================================
+   统计（全量数据统计只做一次，用于文档指纹；页面统计每次渲染重算）
+   ========================================================= */
+const st = (function(){
+  const r = { total:0, leaves:0, 资料:0, 产出:0, 过关:0 };
+  (function walk(n){
+    r.total++;
+    if (!n.children || !n.children.length) r.leaves++;
+    if (n.tag) r[n.tag]++;
+    (n.children || []).forEach(walk);
+  })(ROOT);
+  return r;
+})();
+
+function measure(root){
+  const r = { total:0, leaves:0, 资料:0, 产出:0, 过关:0, mk:0 };
+  (function walk(n){
+    r.total++;
+    if (!n.children || !n.children.length) r.leaves++;
+    if (n.tag) r[n.tag]++;
+    if (n._mk) r.mk++;
+    (n.children || []).forEach(walk);
+  })(root);
+  return r;
+}
+function paintStat(root){
+  const m = measure(root);
+  let html = '节点 <b>' + m.total + '</b> ｜ 研究问题 <b>' + m.leaves + '</b> ｜ 资料入口 <b>' + m['资料'] +
+             '</b> ｜ 必须产出 <b>' + m['产出'] + '</b> ｜ 过关标准 <b>' + m['过关'] + '</b>';
+  if (m.mk) html += ' ｜ 高亮 <b>' + m.mk + '</b>';
+  document.getElementById('statTop').innerHTML = html;
+}
+
+/* =========================================================
+   侧栏导航（每次渲染页面后重建，对齐页只列本页存在的层级）
+   ========================================================= */
+const nav = document.getElementById('nav');
+function navItem(text, code, color, onClick, mini){
+  const a = document.createElement('a');
+  if (mini) a.className = 'mini';
+  a.innerHTML = '<span class="dot" style="background:' + (color || '#C7CED6') + '"></span>' +
+                (code ? '<span class="cd">' + code + '</span>' : '') +
+                '<span style="flex:1">' + text + '</span>';
+  a.addEventListener('click', onClick);
+  nav.appendChild(a);
+  return a;
+}
+function buildNav(){
+  nav.innerHTML = '';
+  const LV1 = document.querySelectorAll('.node.lv1');
+  const MODNODES = document.querySelectorAll('.node.lv2');
+  if (LV1.length) {
+    const h = document.createElement('div'); h.className = 'navsec';
+    h.textContent = (CUR_PAGE === 'main') ? '六条主线' : '本页层级';
+    nav.appendChild(h);
+    LV1.forEach(function(t){
+      const rec = IDMAP[t.dataset.id];
+      const ttl = rec ? rec.node.title : t.textContent;
+      navItem(ttl.replace(/｜.*$/, '｜' + (ttl.split('｜')[1] || '').split('（')[0]), '', rec ? rec.color : '#C7CED6', function(){
+        setColl(t.closest('li'), false);
+        requestAnimationFrame(function(){ focusNode(t); });
+      });
+    });
+  }
+  if (MODNODES.length) {
+    const h = document.createElement('div'); h.className = 'navsec';
+    h.style.marginTop = '10px';
+    h.textContent = MODNODES.length + ' 个模块';
+    nav.appendChild(h);
+    MODNODES.forEach(function(el){
+      const rec = IDMAP[el.dataset.id];
+      const ttl = rec ? rec.node.title : el.textContent;
+      const code = (ttl.match(/^(M\d+)/) || [])[1] || '';
+      const name = ttl.replace(/^M\d+｜/, '').split('：')[0];
+      navItem(name, code, rec ? rec.color : '#C7CED6', function(){
+        const li = el.closest('li');
+        if (li) setColl(li, false);
+        const p = li.parentElement ? li.parentElement.closest('li') : null;
+        if (p) setColl(p, false);
+        requestAnimationFrame(function(){ focusNode(el); });
+      }, true);
+    });
+  }
+  // 高亮卡片快捷入口
+  const ids = Object.keys(HL).filter(function(id){ return ALLNODE[id] && IDMAP[id] && MARKS[HL[id]]; });
+  if (ids.length) {
+    const h = document.createElement('div'); h.className = 'navsec';
+    h.style.marginTop = '10px'; h.textContent = '本页高亮卡片';
+    nav.appendChild(h);
+    ids.forEach(function(id){
+      navItem(IDMAP[id].node.title.replace(/^(必须产出|资料入口|过关标准)[：:]\s*/, '').slice(0, 26),
+              MARKS[HL[id]].k.charAt(0), MARKS[HL[id]].c,
+              function(){ ensureVisible(id); }, true);
+    });
+  }
+}
+
+/* =========================================================
+   按钮
+   ========================================================= */
+document.getElementById('btnCollapse').addEventListener('click', function(){
+  collapseTo(1); applyZoom(); centerView();
+});
+document.getElementById('btnExpand').addEventListener('click', function(){
+  collapseTo(2); applyZoom(); centerView();
+});
+document.getElementById('btnAll').addEventListener('click', function(){
+  document.querySelectorAll('li').forEach(function(li){ setColl(li, false); });
+  applyZoom();
+});
+/* ---- 缩放：按钮 / ⌘(Ctrl)+滚轮 / 快捷键 ---- */
+const MAPSCALE = document.getElementById('mapscale');
+const ZMIN = 0.25, ZMAX = 2.4;
+let zoom = 1;
+const zval = document.getElementById('zval');
+function zClamp(z){ return Math.max(ZMIN, Math.min(ZMAX, Math.round(z * 100) / 100)); }
+function zPaint(){ zval.textContent = Math.round(zoom * 100) + '%'; }
+
+/* 用 transform:scale 缩放，外层 mapscale 按比例撑开滚动区。
+   好处：.map 的布局尺寸不受缩放影响（可随时读 offsetWidth 取内容真实尺寸），
+   滚动坐标始终是标准像素，锚点换算精确，反复缩放不会累积漂移。
+   内容比视口小时把地图居中，避免放大时内容往左上方跑。 */
+function availW(){   // 扣掉抽屉占位后的可用宽度
+  const pr = parseFloat(getComputedStyle(WRAP).paddingRight) || 0;
+  return Math.max(120, WRAP.clientWidth - pr);
+}
+/* 平移留白：四周各留 40% 视口，中键/小手随时能把内容拖到任意位置 */
+function panPad(){
+  return {
+    x: Math.round(Math.max(availW(), WRAP.clientWidth) * 0.4),
+    y: Math.round(WRAP.clientHeight * 0.4)
+  };
+}
+function mapOffset(){
+  // 注意：这里不能按"内容小于视口就居中"来算偏移。
+  // 折叠/展开会让内容尺寸变化，居中量随之变化，整张图会横向平移。
+  // 固定为平移留白，内容位置只由滚动量决定 → 布局变化时视图不跑偏。
+  return panPad();
+}
+function applyZoom(){
+  const cw = MAP.offsetWidth, chh = MAP.offsetHeight;
+  const p = panPad();
+  MAP.style.transform = zoom === 1 ? '' : ('scale(' + zoom + ')');
+  MAPSCALE.style.width = (Math.ceil(cw * zoom) + p.x * 2) + 'px';
+  MAPSCALE.style.height = (Math.ceil(chh * zoom) + p.y * 2) + 'px';
+  const off = mapOffset();
+  MAP.style.left = off.x + 'px';
+  MAP.style.top = off.y + 'px';
+}
+/* 把内容摆正：内容比视口小就居中，比视口大就左上对齐 */
+function centerView(){
+  const off = mapOffset();
+  const cw = MAP.offsetWidth * zoom, chh = MAP.offsetHeight * zoom;
+  WRAP.scrollLeft = off.x - Math.max(0, (availW() - cw) / 2);
+  WRAP.scrollTop = off.y - Math.max(0, (WRAP.clientHeight - chh) / 2);
+}
+/* 以 (ax,ay)（相对可视区左上角）为锚点缩放，保持锚点下的内容不动 */
+function setZoom(z, ax, ay){
+  const nz = zClamp(z);
+  if (Math.abs(nz - zoom) < 0.001) { zPaint(); return; }
+  if (ax == null) { ax = WRAP.clientWidth / 2; ay = WRAP.clientHeight / 2; }
+  const o1 = mapOffset();
+  const cx = (WRAP.scrollLeft + ax - o1.x) / zoom;   // 锚点处的内容坐标
+  const cy = (WRAP.scrollTop + ay - o1.y) / zoom;
+  zoom = nz;
+  applyZoom();
+  const o2 = mapOffset();
+  const sx = cx * zoom - ax + o2.x, sy = cy * zoom - ay + o2.y;
+  WRAP.scrollLeft = sx; WRAP.scrollTop = sy;
+  requestAnimationFrame(function(){ WRAP.scrollLeft = sx; WRAP.scrollTop = sy; });
+  zPaint();
+  saveSoon();
+}
+function zoomFit(){
+  const cw = MAP.offsetWidth, chh = MAP.offsetHeight;
+  if (!cw || !chh) return;
+  const fx = (availW() - 12) / cw, fy = (WRAP.clientHeight - 12) / chh;
+  let z = Math.min(fx, fy, 1), mode = '';
+  if (z < 0.5) {           // 内容太长时整屏适配会小到看不清，退化为"铺满宽度、纵向滚动"
+    z = Math.min(fx, 1);
+    mode = '（内容较长，已改为铺满宽度）';
+  }
+  setZoom(z, 0, 0);
+  centerView();
+  flash('已适配' + mode);
+}
+function zoomReset(){
+  setZoom(1, 0, 0);
+  centerView();
+  const r = document.querySelector('.node.lv0');
+  if (r) requestAnimationFrame(function(){ focusNode(r); });
+}
+document.getElementById('btnZoomIn').addEventListener('click', function(){ setZoom(zoom + 0.1); });
+document.getElementById('btnZoomOut').addEventListener('click', function(){ setZoom(zoom - 0.1); });
+document.getElementById('btnZoomFit').addEventListener('click', zoomFit);
+zval.addEventListener('click', zoomReset);
+WRAP.addEventListener('wheel', function(e){
+  if (!(e.ctrlKey || e.metaKey)) return;
+  e.preventDefault();
+  const wr = WRAP.getBoundingClientRect();
+  setZoom(zoom + (e.deltaY < 0 ? 0.08 : -0.08), e.clientX - wr.left, e.clientY - wr.top);
+}, { passive:false });
+
+/* ---------- 自由拖动：鼠标中键随时可用；小手模式（H / 顶栏按钮）左键拖动 ---------- */
+let HAND = false;
+const btnHand = document.getElementById('btnHand');
+function setHand(on){
+  HAND = !!on;
+  btnHand.classList.toggle('on', HAND);
+  WRAP.classList.toggle('handon', HAND);
+  btnHand.textContent = HAND ? '✋ 拖动中' : '✋ 拖动';
+  btnHand.title = HAND ? '退出小手模式（快捷键 H）' : '小手模式（快捷键 H）：左键拖动地图';
+}
+btnHand.addEventListener('click', function(){ setHand(!HAND); });
+
+let panDrag = null, dragClickGuard = null;
+function panMove(e){
+  if (!panDrag || e.pointerId !== panDrag.id) return;
+  const dx = e.clientX - panDrag.x, dy = e.clientY - panDrag.y;
+  panDrag.moved = Math.max(panDrag.moved, Math.abs(dx) + Math.abs(dy));
+  panDrag.lx = e.clientX; panDrag.ly = e.clientY;
+  WRAP.scrollLeft = panDrag.sl - dx;
+  WRAP.scrollTop = panDrag.st - dy;
+}
+function panEnd(){
+  document.removeEventListener('pointermove', panMove);
+  document.removeEventListener('pointerup', panEnd);
+  document.removeEventListener('pointercancel', panEnd);
+  if (!panDrag) return;
+  // 拖动过就记下松手位置：紧随其后的那次 click 要吞掉，否则会误开抽屉
+  if (panDrag.moved > 4) dragClickGuard = { x: panDrag.lx, y: panDrag.ly, t: Date.now() };
+  panDrag = null;
+  WRAP.classList.remove('panning');
+}
+/* 不用 setPointerCapture：它会把随后那次 click 的目标改写成容器，导致"小手模式下点不开卡片" */
+WRAP.addEventListener('pointerdown', function(e){
+  if (e.button !== 0 && e.button !== 1) return;
+  if (e.button === 0 && !HAND) return;
+  if (e.target.closest('.drawer') || e.target.closest('.ctx') || e.target.closest('.hlpop')) return;
+  panDrag = { id:e.pointerId, x:e.clientX, y:e.clientY, sl:WRAP.scrollLeft, st:WRAP.scrollTop, moved:0, lx:e.clientX, ly:e.clientY };
+  WRAP.classList.add('panning');
+  document.addEventListener('pointermove', panMove);
+  document.addEventListener('pointerup', panEnd);
+  document.addEventListener('pointercancel', panEnd);
+  hideCtx(); hideHlPop();
+});
+WRAP.addEventListener('mousedown', function(e){ if (e.button === 1) e.preventDefault(); });  // 关掉中键自动滚动
+document.addEventListener('selectstart', function(e){ if (panDrag) e.preventDefault(); });
+document.addEventListener('click', function(e){
+  const g = dragClickGuard;
+  if (!g) return;
+  if (Date.now() - g.t > 150) { dragClickGuard = null; return; }   // 只吞拖动那一下自带的 click
+  if (Math.abs(e.clientX - g.x) <= 4 && Math.abs(e.clientY - g.y) <= 4) {
+    dragClickGuard = null;
+    e.stopPropagation(); e.preventDefault();
+  }
+}, true);
+
+/* 折叠 / 展开 / 搜索会改变地图尺寸，尺寸一变就刷新滚动区 */
+if (window.ResizeObserver) {
+  new ResizeObserver(function(){ applyZoom(); }).observe(MAP);
+}
+/* 抽屉开合会改变地图可用宽度（padding 过渡），过渡结束再刷一次 */
+WRAP.addEventListener('transitionend', function(e){
+  if (e.propertyName === 'padding-right') applyZoom();
+});
+applyZoom();
+
+function focusNode(el){
+  const r = el.getBoundingClientRect(), wr = WRAP.getBoundingClientRect();
+  WRAP.scrollLeft += (r.left - wr.left) - 60;
+  WRAP.scrollTop += (r.top - wr.top) - Math.max(40, WRAP.clientHeight / 2 - r.height / 2);
+}
+
+/* =========================================================
+   搜索
+   ========================================================= */
+const q = document.getElementById('q');
+q.addEventListener('input', function(){
+  const kw = q.value.trim().toLowerCase();
+  document.querySelectorAll('.node').forEach(function(n){ n.classList.remove('hit','dim'); });
+  if (!kw) { document.getElementById('qhint').textContent = '例：工资总额 / 隐性债务 / 名单 / 退出'; return; }
+  let hit = 0;
+  Object.keys(IDMAP).forEach(function(id){
+    const it = IDMAP[id];
+    if (it.node.title.toLowerCase().indexOf(kw) > -1) {
+      it.el.classList.add('hit'); hit++;
+      let p = it.el.closest('li');
+      while (p) {
+        setColl(p, false);
+        p = p.parentElement ? p.parentElement.closest('li') : null;
+      }
+    } else it.el.classList.add('dim');
+  });
+  document.getElementById('qhint').textContent = '命中 ' + hit + ' 个节点';
+  const first = document.querySelector('.node.hit');
+  if (first) focusNode(first);
+});
+
+/* =========================================================
+   筛选
+   ========================================================= */
+const branchesBox = document.getElementById('chipsBranch');
+BRANCHES.forEach(function(b){
+  const s = document.createElement('span');
+  s.className = 'chip'; s.dataset.branch = String(b.i);
+  s.style.borderColor = b.color;
+  s.style.color = b.color;
+  s.style.fontWeight = '700';
+  s.style.padding = '2px 9px';
+  s.textContent = b.title.charAt(0);
+  s.title = b.title;
+  branchesBox.appendChild(s);
+});
+document.querySelectorAll('.chip').forEach(function(ch){
+  ch.addEventListener('click', function(){
+    ch.classList.toggle('on');
+    collapseTo(9);          // 筛选取全展开，才看得见命中的叶子
+    requestAnimationFrame(function(){ applyFilter(); });
+  });
+});
+function applyFilter(){
+  const tags = Array.prototype.slice.call(document.querySelectorAll('#chipsTag .chip.on')).map(function(c){ return c.dataset.tag; });
+  const brs = Array.prototype.slice.call(document.querySelectorAll('#chipsBranch .chip.on')).map(function(c){ return c.dataset.branch; });
+  const onlyHL = document.getElementById('chipHL').classList.contains('on');
+  if (!tags.length && !brs.length && !onlyHL) {
+    document.querySelectorAll('.node').forEach(function(n){ n.classList.remove('dim'); n.style.opacity = ''; });
+    return;
+  }
+  Object.keys(IDMAP).forEach(function(id){
+    const it = IDMAP[id];
+    let tagOk = false, brOk = false;
+    if (tags.length && it.node.tag && tags.indexOf(it.node.tag) > -1) tagOk = true;
+    let top = null;
+    const path = id.split('-');
+    let cur = ROOT;
+    for (let k = 0; k < path.length; k++) {
+      if (path[k] === 'root') continue;
+      const i = parseInt(path[k], 10);
+      if (isNaN(i) || !cur.children || !cur.children[i]) { top = null; break; }
+      cur = cur.children[i];
+      if (top === null) top = i;
+    }
+    if (brs.length && top !== null && brs.indexOf(String(top)) > -1) brOk = true;
+    let show;
+    if (tags.length && brs.length) show = tagOk || brOk;
+    else if (tags.length) show = tagOk;
+    else if (brs.length) show = brOk;
+    else show = true;
+    if (onlyHL) show = show && (!!HL[id] || (it.node._mkKids || 0) > 0 || id === 'pgroot');
+    // 容器节点保留但弱化，保证树的结构可读
+    if (!show && it.node.children && it.node.children.length) {
+      it.el.classList.remove('dim');
+      it.el.style.opacity = '.6';
+      if (brs.length) it.el.style.opacity = (top !== null && brs.indexOf(String(top)) > -1) ? '1' : '.35';
+      return;
+    }
+    it.el.style.opacity = '';
+    it.el.classList.toggle('dim', !show);
+  });
+}
+
+/* =========================================================
+   抽屉
+   ========================================================= */
+function closeDrawer(){ DRAWER.classList.remove('on'); MAINEL.classList.remove('drawer-open'); }
+document.getElementById('dclose').addEventListener('click', closeDrawer);
+function openDrawer(id){
+  const it = IDMAP[id];
+  if (!it) return;
+  const n = it.node;
+
+  // 面包屑
+  const chain = [];
+  let p = it.el.closest('ul.children');
+  while (p) {
+    const pli = p.parentElement;
+    const pn = pli ? pli.querySelector(':scope > .node .tt') : null;
+    if (pn) chain.unshift(pn.textContent.replace(/\s*(资料|产出|过关)$/, ''));
+    p = pli && pli.parentElement ? pli.parentElement.closest('ul.children') : null;
+  }
+  document.getElementById('dcrumb').textContent = chain.join('  ›  ') || '研究前思维导图';
+  document.getElementById('dtitle').textContent = n.title;
+
+  const meta = document.getElementById('dmeta');
+  meta.innerHTML = '';
+  if (n.tag) {
+    const s = document.createElement('span');
+    s.className = 'tag ' + TAGCLS[n.tag];
+    s.textContent = TAGTXT[n.tag];
+    meta.appendChild(s);
+  }
+  const cnt = document.createElement('span');
+  cnt.className = 'tag t-C';
+  cnt.style.background = '#EDEFF3'; cnt.style.color = '#5A6673';
+  cnt.textContent = (n.children ? (n.children.length + ' 个子项 / ' + countLeaves(n) + ' 个问题') : '研究问题');
+  meta.appendChild(cnt);
+
+  const body = document.getElementById('dbody');
+  body.innerHTML = '';
+  function sec(title, txt){
+    if (!txt) return;
+    const d = document.createElement('div'); d.className = 'sec';
+    const h = document.createElement('h4'); h.textContent = title;
+    const pe = document.createElement('p'); pe.textContent = txt;
+    d.appendChild(h); d.appendChild(pe); body.appendChild(d);
+  }
+  if (n.tag) sec('全文', n.title.replace(/^(资料入口|必须产出|过关标准)[：:]\s*/, ''));
+  if (id === 'pgroot') {
+    const pg = pageById(CUR_PAGE);
+    sec('本页说明', pg ? (pg.desc || '（还没写说明。点标题条上那一行灰字即可编辑）') : '');
+    sec('本页来源', pg ? ('由高亮卡片自动抽取：' + pg.marks.map(function(i){ return MARKS[i].k; }).join('、')) : '');
+  } else {
+    renderAnnoBlock(id, body);
+    renderHlBlock(id, body);
+  }
+
+  if (n.children && n.children.length) {
+    const d = document.createElement('div'); d.className = 'sec';
+    const h = document.createElement('h4'); h.textContent = '下级条目（' + n.children.length + '）';
+    const ul = document.createElement('ul');
+    n.children.forEach(function(ch){
+      const li = document.createElement('li');
+      li.textContent = ch.title;
+      li.style.cursor = 'pointer';
+      li.addEventListener('click', function(){ openDrawer(ch._uid); focusNode(IDMAP[ch._uid].el); });
+      ul.appendChild(li);
+    });
+    d.appendChild(h); d.appendChild(ul); body.appendChild(d);
+  } else {
+    // 叶子：列出同级问题，便于连续阅读
+    const pa = it.el.closest('li').parentElement;
+    const sibs = pa ? Array.prototype.slice.call(pa.querySelectorAll(':scope > li > .node')) : [];
+    if (sibs.length > 1) {
+      const d = document.createElement('div'); d.className = 'sec';
+      const h = document.createElement('h4'); h.textContent = '同级条目（' + sibs.length + '）';
+      const ul = document.createElement('ul');
+      sibs.forEach(function(s){
+        const rec = IDMAP[s.dataset.id];
+        if (!rec) return;
+        const li = document.createElement('li');
+        li.textContent = rec.node.title;
+        li.style.cursor = 'pointer';
+        if (s.dataset.id === id) { li.style.fontWeight = '700'; li.style.color = '#1A1D23'; }
+        li.addEventListener('click', function(){ openDrawer(s.dataset.id); focusNode(s); });
+        ul.appendChild(li);
+      });
+      d.appendChild(h); d.appendChild(ul); body.appendChild(d);
+    }
+  }
+  DRAWER.classList.add('on');
+  MAINEL.classList.add('drawer-open');
+}
+
+/* =========================================================
+   视图切换
+   ========================================================= */
+const viewPlan = document.getElementById('viewPlan');
+document.getElementById('tabTree').addEventListener('click', function(){
+  this.classList.add('on');
+  document.getElementById('tabPlan').classList.remove('on');
+  viewPlan.classList.remove('on');
+  WRAP.style.display = 'block';
+});
+document.getElementById('tabPlan').addEventListener('click', function(){
+  this.classList.add('on');
+  document.getElementById('tabTree').classList.remove('on');
+  WRAP.style.display = 'none';
+  DRAWER.classList.remove('on'); MAINEL.classList.remove('drawer-open');
+  viewPlan.classList.add('on');
+  renderMaps();
+});
+
+/* =========================================================
+   任务地图
+   ========================================================= */
+let done = false;
+function renderMaps(){
+  if (done) return; done = true;
+  let html = '<div class="maps">' +
+    '<h2 class="planh">研究任务地图</h2>' +
+    '<p class="maphint">16 个模块按六条主线归位。每个模块固定产出三样东西：<b>资料入口</b>（要查哪些材料）、' +
+    '<b>必须产出</b>（要交出什么）、<b>过关标准</b>（怎么算研究到位）。' +
+    'F 主线（案例比较与咨询实践）全程穿插，不排在末尾才做。</p>';
+  const grouped = {};
+  MODMAP.forEach(function(m){ (grouped[m.branch] = grouped[m.branch] || []).push(m); });
+  Object.keys(grouped).forEach(function(bn){
+    const arr = grouped[bn];
+    html += '<div class="mapb"><header style="background:' + arr[0].color + '">' +
+            '<span>' + bn + '</span><span class="n">' + arr.length + ' 个模块</span></header><div class="cards">';
+    arr.forEach(function(m){
+      html += '<div class="mcard">' +
+        '<h4>' + m.title + '</h4>' +
+        '<div class="row o"><b>必须产出：</b>' + esc(m.out.replace(/^必须产出[：:]\s*/, '')) + '</div>' +
+        '<div class="row p"><b>过关标准：</b>' + esc(m.pass.replace(/^过关标准[：:]\s*/, '')) + '</div>' +
+        '<div class="ft">' + m.subs + ' 个研究维度 / ' + m.leaves + ' 个问题</div>' +
+        '</div>';
+    });
+    html += '</div></div>';
+  });
+  html += '</div>';
+  viewPlan.innerHTML = html;
+}
+function esc(s){
+  return String(s || '（未标注）').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* =========================================================
+   标注系统 + 本地保存（本版新增）
+   ========================================================= */
+const STATES = [
+  { k:'重点', c:'#D64545' },
+  { k:'待办', c:'#E08600' },
+  { k:'已核', c:'#2E9E8F' },
+  { k:'疑问', c:'#7A5AF8' },
+  { k:'备注', c:'#667085' }
+];
+const DEFAULT_STATE = 4;
+let ANNO = {};             // 节点 id -> { t:文本, s:状态序号, u:更新时间, h:节点标题快照 }
+let annoFocusId = null;    // 抽屉当前打开的节点 id
+let pendingZoom = null;    // 从本地存储恢复的缩放值
+let lastSaved = '';
+
+/* ---------- 文档指纹：同一份导图才共享同一份标注 ---------- */
+const DOC_KEY = (function(){
+  const s = document.title + '|' + st.total + '|' +
+            BRANCHES.map(function(b){ return b.title.slice(0, 8); }).join(',');
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return 'mindmap:' + h.toString(36);
+})();
+
+const STORE_OK = (function(){
+  try { localStorage.setItem('__mm_probe', '1'); localStorage.removeItem('__mm_probe'); return true; }
+  catch (e) { return false; }
+})();
+
+function hhmm(d){
+  d = d || new Date();
+  return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+}
+function fmtTime(iso){
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  return (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + hhmm(d);
+}
+function flash(msg, ok){
+  const el = document.getElementById('saveStat');
+  el.textContent = msg;
+  el.classList.toggle('ok', ok !== false);
+  clearTimeout(flash._t);
+  flash._t = setTimeout(function(){
+    el.textContent = lastSaved ? ('已保存 ' + lastSaved) : '';
+    el.classList.toggle('ok', !!lastSaved);
+  }, 2800);
+}
+function showWarn(msg){
+  const el = document.getElementById('storeWarn');
+  if (msg) el.textContent = msg;
+  else if (!el.textContent) {
+    el.textContent = '当前环境不允许写入浏览器存储（隐私模式或被拦截）。标注只在本页临时保留，请用「导出备份」存成文件。';
+  }
+  el.classList.add('on');
+}
+
+/* ---------- 存取 ---------- */
+let saveTimer = null;
+function saveSoon(){
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){ saveNow(true); }, 700);
+}
+function saveNow(quiet){
+  const payload = {
+    v: 2, doc: document.title, saved: new Date().toISOString(),
+    nodeCount: st.total, zoom: zoom, anno: ANNO,
+    hl: HL, pages: PAGES, cur: CUR_PAGE
+  };
+  const stat = document.getElementById('saveStat');
+  if (!STORE_OK) {
+    showWarn();
+    if (!quiet) flash('无法写入浏览器存储，请改用「导出备份」', false);
+    return false;
+  }
+  try {
+    localStorage.setItem(DOC_KEY, JSON.stringify(payload));
+    lastSaved = hhmm();
+    stat.textContent = '已保存 ' + lastSaved;
+    stat.classList.add('ok');
+    if (!quiet) flash('已保存 ' + lastSaved);
+    return true;
+  } catch (e) {
+    showWarn('写入浏览器存储失败：' + e.message + '。请用「导出备份」把标注存成文件。');
+    flash('保存失败', false);
+    return false;
+  }
+}
+function loadStore(){
+  if (!STORE_OK) { showWarn(); return; }
+  let raw = null;
+  try { raw = localStorage.getItem(DOC_KEY); } catch (e) { return; }
+  if (!raw) return;
+  let d = null;
+  try { d = JSON.parse(raw); } catch (e) { return; }
+  if (d && d.anno && typeof d.anno === 'object') {
+    Object.keys(d.anno).forEach(function(k){
+      const v = d.anno[k];
+      if (v && typeof v === 'object' && typeof v.t === 'string' && v.t.trim()) ANNO[k] = v;
+    });
+  }
+  if (d && typeof d.zoom === 'number') pendingZoom = zClamp(d.zoom);
+  if (d && d.hl && typeof d.hl === 'object') {
+    Object.keys(d.hl).forEach(function(k){
+      const i = d.hl[k];
+      if (typeof i === 'number' && i >= 0 && i < MARKS.length && ALLNODE[k]) HL[k] = i;
+    });
+  }
+  if (d && Object.prototype.toString.call(d.pages) === '[object Array]') {
+    d.pages.forEach(function(p){
+      if (!p || typeof p !== 'object' || !p.name) return;
+      const marks = (Object.prototype.toString.call(p.marks) === '[object Array]' ? p.marks : [])
+        .filter(function(i){ return typeof i === 'number' && i >= 0 && i < MARKS.length; });
+      PAGES.push({ id: String(p.id || ('p' + Math.random().toString(36).slice(2, 8))),
+                   name: String(p.name).slice(0, 60), desc: String(p.desc || ''), marks: marks });
+    });
+  }
+  if (d && typeof d.cur === 'string') CUR_PAGE = d.cur;
+  if (d && d.saved) {
+    lastSaved = hhmm(new Date(d.saved));
+    const stat = document.getElementById('saveStat');
+    stat.textContent = '已恢复 ' + lastSaved;
+    stat.classList.add('ok');
+  }
+}
+
+/* ---------- 节点角标 ---------- */
+function stateOf(i){ return STATES[i] || STATES[DEFAULT_STATE]; }
+function hasAnno(id){ const a = ANNO[id]; return !!(a && a.t && a.t.trim()); }
+function updateBadge(id){
+  const it = IDMAP[id];
+  if (!it) return;
+  let b = it.el.querySelector(':scope > .abadge');
+  if (!hasAnno(id)) {
+    if (b) b.remove();
+    it.el.classList.remove('anno-on');
+    return;
+  }
+  const s = stateOf(ANNO[id].s);
+  if (!b) { b = document.createElement('span'); b.className = 'abadge'; it.el.appendChild(b); }
+  b.style.background = s.c;
+  b.textContent = s.k.charAt(0);
+  b.title = s.k + ' · ' + ANNO[id].t;
+  it.el.classList.add('anno-on');
+}
+function refreshBadges(){
+  // 先清空全部角标，再按当前标注重建（否则清空/导入后会残留旧角标）
+  document.querySelectorAll('.abadge').forEach(function(b){ b.remove(); });
+  document.querySelectorAll('.node.anno-on').forEach(function(n){ n.classList.remove('anno-on'); });
+  Object.keys(ANNO).forEach(updateBadge);
+  renderAnnoList();
+}
+
+/* ---------- 侧栏：我的标注 ---------- */
+function annoCountNum(){ return Object.keys(ANNO).filter(hasAnno).length; }
+function renderAnnoList(){
+  const box = document.getElementById('annoList');
+  const ids = Object.keys(ANNO).filter(hasAnno);
+  document.getElementById('annoCount').textContent = ids.length + ' 条';
+  box.innerHTML = '';
+  if (!ids.length) {
+    const d = document.createElement('div');
+    d.className = 'empty';
+    d.textContent = '还没有标注。点开图中任意节点，在右侧「我的标注」里写批注，停止输入即自动保存到本机。';
+    box.appendChild(d);
+    return;
+  }
+  ids.sort(function(a, b){
+    return String((ANNO[b] || {}).u || '').localeCompare(String((ANNO[a] || {}).u || ''));
+  });
+  ids.forEach(function(id){
+    const a = ANNO[id], known = !!ALLNODE[id];
+    const row = document.createElement('div');
+    row.className = 'annorow' + (known ? '' : ' orphan');
+    const dt = document.createElement('span');
+    dt.className = 'dt'; dt.style.background = stateOf(a.s).c;
+    const tx = document.createElement('div'); tx.className = 'tx';
+    const b = document.createElement('b');
+    b.textContent = stateOf(a.s).k + ' · ' + (a.h || (known ? ALLNODE[id].title : '（原卡片已不在结构中）'));
+    const sp = document.createElement('span');
+    sp.textContent = a.t;
+    tx.appendChild(b); tx.appendChild(sp);
+    row.appendChild(dt); row.appendChild(tx);
+    row.title = '点击定位到该节点';
+    row.addEventListener('click', function(){ gotoAnno(id); });
+    box.appendChild(row);
+  });
+}
+let hitTimer = null;
+/* 定位到某张卡片：若不在当前页（比如对齐页里没有它），先切回全景图 */
+function openNodeById(id, withDrawer){
+  if (!IDMAP[id]) {
+    if (CUR_PAGE !== 'main') setPage('main');
+    if (!IDMAP[id]) { flash('这张卡片在当前结构里已找不到', false); return; }
+  }
+  if (document.getElementById('tabPlan').classList.contains('on')) {
+    document.getElementById('tabTree').click();
+  }
+  const it = IDMAP[id];
+  let p = it.el.closest('li');
+  while (p) { setColl(p, false); p = p.parentElement ? p.parentElement.closest('li') : null; }
+  requestAnimationFrame(function(){
+    focusNode(it.el);
+    if (withDrawer) openDrawer(id);
+    if (hitTimer) clearTimeout(hitTimer);
+    it.el.classList.add('hit');
+    hitTimer = setTimeout(function(){ it.el.classList.remove('hit'); }, 1800);
+  });
+}
+function ensureVisible(id){ openNodeById(id, false); }
+function gotoAnno(id){ openNodeById(id, true); }
+
+/* ---------- 抽屉里的标注编辑区 ---------- */
+function renderAnnoBlock(id, body){
+  annoFocusId = id;
+  const rec = ANNO[id];
+  const d = document.createElement('div');
+  d.className = 'anno';
+
+  const ah = document.createElement('div'); ah.className = 'ah';
+  const h4 = document.createElement('h4'); h4.textContent = '我的标注';
+  const tm = document.createElement('span'); tm.className = 'tm';
+  ah.appendChild(h4); ah.appendChild(tm);
+
+  const ab = document.createElement('div'); ab.className = 'ab';
+  const ta = document.createElement('textarea');
+  ta.placeholder = '写点什么：这一步为什么卡住 / 要找谁要材料 / 需要核对的口径…（停止输入后自动保存）';
+  ta.value = (rec && rec.t) ? rec.t : '';
+
+  let cur = (rec && typeof rec.s === 'number') ? rec.s : DEFAULT_STATE;
+  const states = document.createElement('div'); states.className = 'states';
+  const chips = STATES.map(function(s, i){
+    const c = document.createElement('span');
+    c.className = 'st' + (i === cur ? ' on' : '');
+    c.textContent = s.k;
+    c.title = '标为「' + s.k + '」';
+    if (i === cur) c.style.background = s.c;
+    c.addEventListener('click', function(){
+      cur = i;
+      chips.forEach(function(x, j){
+        x.classList.toggle('on', i === j);
+        x.style.background = (i === j) ? STATES[j].c : '';
+      });
+      commit(false);
+    });
+    states.appendChild(c);
+    return c;
+  });
+
+  const foot = document.createElement('div'); foot.className = 'foot';
+  const bSave = document.createElement('button'); bSave.className = 'btn pri'; bSave.textContent = '保存';
+  const bDel = document.createElement('button'); bDel.className = 'btn del'; bDel.textContent = '删除标注';
+  foot.appendChild(bSave); foot.appendChild(bDel);
+  ab.appendChild(ta); ab.appendChild(states); ab.appendChild(foot);
+  d.appendChild(ah); d.appendChild(ab);
+  body.insertBefore(d, body.firstChild);
+
+  function paint(){
+    tm.textContent = hasAnno(id) ? (stateOf(ANNO[id].s).k + ' · ' + fmtTime(ANNO[id].u)) : '未标注';
+  }
+  function commit(showMsg){
+    const t = ta.value.trim();
+    if (!t) {
+      if (ANNO[id]) { delete ANNO[id]; if (showMsg) flash('已清空并删除该标注'); }
+    } else {
+      const old = ANNO[id] || {};
+      ANNO[id] = {
+        t: t, s: cur, u: new Date().toISOString(),
+        h: (IDMAP[id] ? IDMAP[id].node.title : (old.h || '')).slice(0, 160)
+      };
+      if (showMsg) flash('已保存 ' + hhmm());
+    }
+    updateBadge(id);
+    renderAnnoList();
+    saveNow(true);
+    paint();
+  }
+  let t1 = null;
+  ta.addEventListener('input', function(){
+    if (t1) clearTimeout(t1);
+    t1 = setTimeout(function(){ commit(false); }, 900);
+  });
+  ta.addEventListener('blur', function(){ if (t1) clearTimeout(t1); commit(false); });
+  bSave.addEventListener('click', function(){ if (t1) clearTimeout(t1); commit(true); });
+  bDel.addEventListener('click', function(){
+    if (!hasAnno(id)) { ta.value = ''; paint(); return; }
+    if (!confirm('删除这条标注？')) return;
+    delete ANNO[id];
+    ta.value = '';
+    updateBadge(id); renderAnnoList(); saveNow(true); paint();
+    flash('已删除该标注');
+  });
+  paint();
+}
+
+/* ---------- 导出 / 导入 / 清空 ---------- */
+function exportBackup(){
+  const payload = {
+    v: 2, doc: document.title, exported: new Date().toISOString(),
+    nodeCount: st.total, zoom: zoom, anno: ANNO, hl: HL, pages: PAGES, cur: CUR_PAGE
+  };
+  const d = new Date();
+  const name = '思维导图标注_' + d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) +
+               ('0' + d.getDate()).slice(-2) + '_' + hhmm().replace(':', '') + '.json';
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 800);
+  flash('已导出：标注 ' + annoCountNum() + ' 条 · 高亮 ' + hlCount() + ' 张 · 对齐页 ' + PAGES.length + ' 个', true);
+}
+function importBackup(file){
+  const fr = new FileReader();
+  fr.onload = function(){
+    let d = null;
+    try { d = JSON.parse(fr.result); } catch (e) { flash('导入失败：不是有效的 JSON 文件', false); return; }
+    const src = (d && d.anno && typeof d.anno === 'object') ? d.anno : (d && typeof d === 'object' ? d : null);
+    if (!src) { flash('导入失败：文件里没有标注数据', false); return; }
+    let n = 0;
+    Object.keys(src).forEach(function(k){
+      const v = src[k];
+      if (v && typeof v === 'object' && typeof v.t === 'string' && v.t.trim()) { ANNO[k] = v; n++; }
+    });
+    let nh = 0, np = 0;
+    if (d && d.hl && typeof d.hl === 'object') {
+      Object.keys(d.hl).forEach(function(k){
+        const i = d.hl[k];
+        if (typeof i === 'number' && i >= 0 && i < MARKS.length && ALLNODE[k]) { HL[k] = i; nh++; }
+      });
+    }
+    if (d && Object.prototype.toString.call(d.pages) === '[object Array]') {
+      d.pages.forEach(function(p){
+        if (!p || !p.name) return;
+        const exist = PAGES.filter(function(x){ return x.name === p.name; }).length;
+        if (exist) return;
+        PAGES.push({ id: String(p.id || ('p' + Math.random().toString(36).slice(2, 8))),
+                     name: String(p.name).slice(0, 60), desc: String(p.desc || ''),
+                     marks: (p.marks || []).filter(function(i){ return typeof i === 'number' && i >= 0 && i < MARKS.length; }) });
+        np++;
+      });
+    }
+    saveNow(true);
+    refreshBadges();
+    refreshHL();
+    renderPageList();
+    if (CUR_PAGE !== 'main') renderPage();
+    if (annoFocusId && DRAWER.classList.contains('on')) openDrawer(annoFocusId);
+    flash('已导入 / 合并：标注 ' + n + ' 条 · 高亮 ' + nh + ' 张 · 对齐页 ' + np + ' 个');
+  };
+  fr.readAsText(file);
+}
+document.getElementById('btnExport').addEventListener('click', exportBackup);
+document.getElementById('btnExport2').addEventListener('click', exportBackup);
+document.getElementById('btnImport').addEventListener('click', function(){
+  document.getElementById('fileImport').click();
+});
+document.getElementById('fileImport').addEventListener('change', function(e){
+  const f = e.target.files && e.target.files[0];
+  if (f) importBackup(f);
+  e.target.value = '';
+});
+document.getElementById('btnClear').addEventListener('click', function(){
+  const n = annoCountNum(), m = hlCount();
+  if (!n && !m && !PAGES.length) { flash('当前还没有标注和高亮'); return; }
+  if (!confirm('将清空：' + n + ' 条标注、' + m + ' 张高亮、' + PAGES.length + ' 个对齐页，且无法撤销。\n建议先用「导出备份」留一份。确定继续？')) return;
+  ANNO = {}; HL = {}; PAGES = []; CUR_PAGE = 'main';
+  saveNow(true);
+  renderPage();
+  flash('已清空标注、高亮与对齐页', false);
+});
+document.getElementById('btnAnno').addEventListener('click', function(){
+  if (!annoFocusId || !DRAWER.classList.contains('on')) { flash('先点开一个节点，再写标注', false); return; }
+  const ta = DRAWER.querySelector('.anno textarea');
+  if (ta) { ta.focus(); ta.scrollIntoView({ block:'center', behavior:'smooth' }); }
+});
+
+/* ---------- 快捷键 ---------- */
+document.addEventListener('keydown', function(e){
+  const meta = e.metaKey || e.ctrlKey;
+  const tag = ((e.target && e.target.tagName) || '').toLowerCase();
+  const typing = tag === 'input' || tag === 'textarea' || (e.target && e.target.isContentEditable);
+  if (!meta) {
+    if (e.key === 'Escape') { closeDrawer(); hideCtx(); hideHlPop(); return; }
+    if (!typing && (e.key === 'h' || e.key === 'H')) { setHand(!HAND); return; }
+    return;
+  }
+  const k = e.key;
+  if (k === '=' || k === '+') { e.preventDefault(); setZoom(zoom + 0.1); }
+  else if (k === '-' || k === '_') { e.preventDefault(); setZoom(zoom - 0.1); }
+  else if (k === '0') { e.preventDefault(); zoomFit(); }
+  else if (k.toLowerCase() === 's') { e.preventDefault(); saveNow(false); }
+});
+
+/* =========================================================
+   高亮标记：把"先做哪几块"直接标在图上
+   ========================================================= */
+function markOf(id){ const i = HL[id]; return (i == null) ? null : (MARKS[i] || null); }
+function hlCount(){
+  return Object.keys(HL).filter(function(id){ return ALLNODE[id] && MARKS[HL[id]]; }).length;
+}
+function paintHL(id){
+  const it = IDMAP[id];
+  if (!it) return;
+  const m = markOf(id);
+  let chip = it.el.querySelector(':scope > .hlc');
+  if (!m) {
+    if (chip) chip.remove();
+    it.el.classList.remove('hl');
+    it.el.style.removeProperty('--hlc');
+    it.el.style.removeProperty('--hlt');
+    return;
+  }
+  it.el.classList.add('hl');
+  it.el.style.setProperty('--hlc', m.c);
+  it.el.style.setProperty('--hlt', m.c + '14');
+  if (!chip) { chip = document.createElement('span'); chip.className = 'hlc'; it.el.appendChild(chip); }
+  chip.style.background = m.c;
+  chip.textContent = m.k;
+  chip.title = m.k + '：' + m.d;
+}
+function refreshHL(){
+  document.querySelectorAll('.node.hl').forEach(function(n){
+    n.classList.remove('hl');
+    n.style.removeProperty('--hlc');
+    n.style.removeProperty('--hlt');
+  });
+  document.querySelectorAll('.hlc').forEach(function(c){ c.remove(); });
+  Object.keys(HL).forEach(paintHL);
+  renderHLLegend();
+}
+/* 主图上每张卡片"子树里有多少高亮"——供「只看高亮」筛选与对齐页折叠使用 */
+function annotateMain(node, path){
+  let n = HL[path] != null ? 1 : 0;
+  (node.children || []).forEach(function(c, i){ n += annotateMain(c, path + '-' + i); });
+  node._mkKids = n;
+  return n;
+}
+function setMark(id, idx){
+  if (idx == null || idx === '') delete HL[id]; else HL[id] = idx;
+  hideHlPop();
+  annotateMain(ROOT, 'root');
+  paintHL(id);
+  renderHLLegend();
+  buildNav();
+  renderPageList();
+  if (document.getElementById('chipHL').classList.contains('on')) applyFilter();
+  if (CUR_PAGE !== 'main') refreshPageTree();
+  saveSoon();
+}
+function renderHLLegend(){
+  const box = document.getElementById('hlLegend');
+  const counts = MARKS.map(function(){ return 0; });
+  Object.keys(HL).forEach(function(id){
+    if (ALLNODE[id] && MARKS[HL[id]]) counts[HL[id]]++;
+  });
+  document.getElementById('hlCount').textContent =
+    counts.reduce(function(a, b){ return a + b; }, 0) + ' 个';
+  box.innerHTML = '';
+  MARKS.forEach(function(m, i){
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.title = m.d + '（点一下定位到第一张）';
+    const ic = document.createElement('i'); ic.style.background = m.c;
+    const sp = document.createElement('span'); sp.textContent = m.k;
+    const nn = document.createElement('span'); nn.className = 'n'; nn.textContent = counts[i];
+    row.appendChild(ic); row.appendChild(sp); row.appendChild(nn);
+    row.addEventListener('click', function(){ jumpToMark(i); });
+    box.appendChild(row);
+  });
+}
+function jumpToMark(i){
+  const ids = Object.keys(HL).filter(function(id){ return HL[id] === i && ALLNODE[id]; });
+  if (!ids.length) { flash('还没有标为「' + MARKS[i].k + '」的卡片', false); return; }
+  ensureVisible(ids[0]);
+}
+/* 抽屉里的高亮区 */
+function renderHlBlock(id, body){
+  const d = document.createElement('div');
+  d.className = 'anno';
+  const ah = document.createElement('div'); ah.className = 'ah';
+  const h4 = document.createElement('h4'); h4.textContent = '高亮标记';
+  const tm = document.createElement('span'); tm.className = 'tm';
+  const m0 = markOf(id);
+  tm.textContent = m0 ? (m0.k + ' · ' + m0.d) : '未标记';
+  ah.appendChild(h4); ah.appendChild(tm);
+  const ab = document.createElement('div'); ab.className = 'ab';
+  const states = document.createElement('div');
+  states.className = 'states'; states.style.margin = '0';
+  MARKS.forEach(function(m, i){
+    const c = document.createElement('span');
+    c.className = 'st' + (HL[id] === i ? ' on' : '');
+    c.textContent = m.k;
+    c.title = m.d;
+    if (HL[id] === i) c.style.background = m.c;
+    c.addEventListener('click', function(){
+      setMark(id, HL[id] === i ? null : i);
+      if (IDMAP[id]) openDrawer(id);
+    });
+    states.appendChild(c);
+  });
+  ab.appendChild(states);
+  d.appendChild(ah); d.appendChild(ab);
+  body.insertBefore(d, body.firstChild);
+}
+
+/* =========================================================
+   高亮调色板 / 右键菜单
+   ========================================================= */
+const HLPOP = document.getElementById('hlpop');
+const CTX = document.getElementById('ctx');
+function hideHlPop(){ HLPOP.classList.remove('on'); }
+function hideCtx(){ CTX.classList.remove('on'); }
+function place(el, r, dx, dy){
+  const w = el.offsetWidth, h = el.offsetHeight;
+  let x = r.right + dx, y = r.top + dy;
+  if (x + w > window.innerWidth - 8) x = r.left - w - dx;
+  if (y + h > window.innerHeight - 8) y = window.innerHeight - h - 8;
+  el.style.left = Math.max(8, x) + 'px';
+  el.style.top = Math.max(8, y) + 'px';
+}
+function openHlPop(id, anchorEl){
+  if (!IDMAP[id]) return;
+  HLPOP.innerHTML = '';
+  const h5 = document.createElement('h5');
+  h5.textContent = '标记这张卡片';
+  HLPOP.appendChild(h5);
+  const box = document.createElement('div'); box.className = 'opts';
+  MARKS.forEach(function(m, i){
+    const o = document.createElement('div');
+    o.className = 'opt';
+    o.innerHTML = '<i style="background:' + m.c + '"></i><span>' + m.k + '</span>' +
+                  (HL[id] === i ? '<span class="k">✓ 当前</span>' : '');
+    o.title = m.d;
+    o.addEventListener('click', function(){ setMark(id, HL[id] === i ? null : i); });
+    box.appendChild(o);
+  });
+  HLPOP.appendChild(box);
+  const sep = document.createElement('div'); sep.className = 'sep'; HLPOP.appendChild(sep);
+  const box2 = document.createElement('div'); box2.className = 'opts';
+  const c1 = document.createElement('div'); c1.className = 'opt';
+  c1.innerHTML = '<span>清除高亮</span>';
+  c1.addEventListener('click', function(){ setMark(id, null); });
+  const c2 = document.createElement('div'); c2.className = 'opt';
+  c2.innerHTML = '<span>按全部高亮生成对齐页</span>';
+  c2.addEventListener('click', function(){ hideHlPop(); newPageFromHL(); });
+  box2.appendChild(c1); box2.appendChild(c2);
+  HLPOP.appendChild(box2);
+  HLPOP.classList.add('on');
+  place(HLPOP, anchorEl.getBoundingClientRect(), 8, -4);
+}
+function openCtx(x, y, id){
+  if (!IDMAP[id]) return;
+  CTX.innerHTML = '';
+  const lb = document.createElement('div'); lb.className = 'lb'; lb.textContent = '标高亮'; CTX.appendChild(lb);
+  const row = document.createElement('div'); row.className = 'hlrow';
+  MARKS.forEach(function(m, i){
+    const sw = document.createElement('span');
+    sw.className = 'sw'; sw.style.background = m.c;
+    sw.title = m.k + '：' + m.d;
+    if (HL[id] === i) sw.style.boxShadow = '0 0 0 2px ' + m.c;
+    sw.addEventListener('click', function(){ setMark(id, HL[id] === i ? null : i); hideCtx(); });
+    row.appendChild(sw);
+  });
+  const clr = document.createElement('span');
+  clr.className = 'clr'; clr.textContent = '清除';
+  clr.addEventListener('click', function(){ setMark(id, null); hideCtx(); });
+  row.appendChild(clr);
+  CTX.appendChild(row);
+  const hr = document.createElement('div'); hr.className = 'hr'; CTX.appendChild(hr);
+  function item(html, fn){
+    const o = document.createElement('div');
+    o.className = 'it'; o.innerHTML = html;
+    o.addEventListener('click', fn);
+    CTX.appendChild(o);
+  }
+  item('<span>写 / 看批注</span>', function(){ hideCtx(); openNodeById(id, true); });
+  item('<span>按全部高亮生成对齐页</span>', function(){ hideCtx(); newPageFromHL(); });
+  item('<span>展开 / 收起下级</span>', function(){ hideCtx(); toggleById(id); });
+  item('<span>复制卡片标题</span>', function(){ hideCtx(); copyText((ALLNODE[id] || {}).title || ''); });
+  CTX.classList.add('on');
+  place(CTX, { left: x, right: x, top: y, bottom: y }, 0, 0);
+}
+function toggleById(id){
+  const it = IDMAP[id];
+  if (!it) { flash('这页里没有这张卡片', false); return; }
+  const li = it.el.closest('li');
+  setColl(li, !li.classList.contains('collapsed'));
+  applyZoom();
+}
+function copyText(t){
+  if (!t) return;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t);
+      flash('已复制卡片标题');
+      return;
+    }
+  } catch (e) {}
+  const ta = document.createElement('textarea');
+  ta.value = t; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); flash('已复制卡片标题'); } catch (e2) { flash('复制失败', false); }
+  ta.remove();
+}
+document.addEventListener('click', function(e){
+  if (!e.target.closest('.hlpop') && !e.target.closest('.hbtn')) hideHlPop();
+  if (!e.target.closest('.ctx')) hideCtx();
+});
+WRAP.addEventListener('scroll', function(){ hideHlPop(); hideCtx(); });
+window.addEventListener('resize', function(){ hideHlPop(); hideCtx(); });
+
+/* =========================================================
+   对齐页：把高亮出来的层级抽成一张新图，单独成页、可命名
+   ========================================================= */
+let pageKeyShown = '';
+function pageById(id){ for (let i = 0; i < PAGES.length; i++) if (PAGES[i].id === id) return PAGES[i]; return null; }
+function markIds(marks){
+  return Object.keys(HL).filter(function(id){ return marks.indexOf(HL[id]) > -1 && ALLNODE[id]; });
+}
+function deepCopy(node, path){
+  const c = { title: node.title, _path: path };
+  if (node.tag) c.tag = node.tag;
+  if (node.color) c.color = node.color;
+  const kids = node.children || [];
+  if (kids.length) c.children = kids.map(function(k, i){ return deepCopy(k, path + '-' + i); });
+  return c;
+}
+/* 保留：通往高亮卡片的路径 + 高亮卡片自身（及其完整下级） */
+function buildPageChildren(wantIds){
+  const want = {};
+  wantIds.forEach(function(id){ want[id] = true; });
+  function rec(node, path){
+    const kids = [];
+    (node.children || []).forEach(function(c, i){
+      const r = rec(c, path + '-' + i);
+      if (r) kids.push(r);
+    });
+    const self = !!want[path];
+    if (!self && !kids.length) return null;
+    const out = { title: node.title, _path: path };
+    if (node.tag) out.tag = node.tag;
+    if (node.color) out.color = node.color;
+    if (self) {
+      out._mk = true;
+      if ((node.children || []).length) {
+        out.children = node.children.map(function(c, i){ return deepCopy(c, path + '-' + i); });
+      }
+    } else {
+      out.children = kids;
+    }
+    return out;
+  }
+  const res = [];
+  (ROOT.children || []).forEach(function(c, i){
+    const r = rec(c, 'root-' + i);
+    if (r) res.push(r);
+  });
+  return res;
+}
+function annotateMK(node){
+  let n = node._mk ? 1 : 0;
+  (node.children || []).forEach(function(c){ n += annotateMK(c); });
+  node._mkKids = n;
+  return n;
+}
+function currentPageInfo(){
+  if (CUR_PAGE === 'main') return { root: ROOT, isMain: true, name: '全景图', desc: '', marks: [] };
+  const pg = pageById(CUR_PAGE);
+  if (!pg) {
+    CUR_PAGE = 'main';
+    return { root: ROOT, isMain: true, name: '全景图', desc: '', marks: [] };
+  }
+  const ids = markIds(pg.marks);
+  const vroot = { title: pg.name, _path: 'pgroot', color: '#2E3A48' };
+  const kids = buildPageChildren(ids);
+  if (kids.length) vroot.children = kids;
+  annotateMK(vroot);
+  return { root: vroot, isMain: false, name: pg.name, desc: pg.desc || '',
+           marks: pg.marks.slice(), pg: pg, count: ids.length };
+}
+function renderPage(){
+  closeDrawer();
+  hideCtx(); hideHlPop();
+  Object.keys(IDMAP).forEach(function(k){ delete IDMAP[k]; });
+  uid = 0;
+  TREE.innerHTML = '';
+  if (CUR_PAGE === 'main') annotateMain(ROOT, 'root');
+  const info = currentPageInfo();
+  TREE.appendChild(liEl(info.root, 0, '#2E3A48', info.root._path || 'root'));
+  paintStat(info.root);
+  paintPageHead(info);
+  paintMarksChips(info);
+  buildNav();
+  if (info.isMain) {
+    collapseTo(2);
+  } else {
+    Object.keys(IDMAP).forEach(function(id){
+      const it = IDMAP[id];
+      setColl(it.el.closest('li'), !(it.node._mk || (it.node._mkKids || 0) > 0));
+    });
+  }
+  pageKeyShown = info.isMain ? '' : markIds(info.marks).sort().join(',');
+  applyZoom();
+  centerView();
+  refreshBadges();
+  refreshHL();
+  renderPageList();
+  renderAnnoList();
+  zPaint();
+}
+function paintPageHead(info){
+  const head = document.getElementById('pageHead');
+  if (info.isMain) { head.classList.add('off'); return; }
+  head.classList.remove('off');
+  const nm = document.getElementById('phName'), ds = document.getElementById('phDesc');
+  if ((nm.textContent || '').trim() !== info.name) nm.textContent = info.name;
+  if ((ds.textContent || '').trim() !== (info.desc || '').trim()) ds.textContent = info.desc || '';
+  document.getElementById('phMeta').textContent = info.count + ' 张卡片 · 抽取自高亮';
+}
+function paintMarksChips(info){
+  const box = document.getElementById('phMarks');
+  box.innerHTML = '';
+  if (info.isMain) return;
+  const pg = info.pg;
+  MARKS.forEach(function(m, i){
+    const on = pg.marks.indexOf(i) > -1;
+    const s = document.createElement('span');
+    s.className = 'mk' + (on ? ' on' : ' off');
+    s.title = on ? ('点一下把「' + m.k + '」移出本页') : ('点一下把「' + m.k + '」加入本页');
+    const ic = document.createElement('i'); ic.style.background = m.c;
+    const sp = document.createElement('span');
+    sp.textContent = m.k; sp.style.color = on ? 'var(--ink)' : 'var(--ink3)';
+    s.appendChild(ic); s.appendChild(sp);
+    s.addEventListener('click', function(){
+      const k = pg.marks.indexOf(i);
+      if (k > -1) pg.marks.splice(k, 1); else pg.marks.push(i);
+      pg.marks.sort(function(a, b){ return a - b; });
+      renderPage(); saveNow(true);
+      flash('已' + (k > -1 ? '移出' : '加入') + '「' + m.k + '」');
+    });
+    box.appendChild(s);
+  });
+}
+function refreshPageTree(){
+  const pg = pageById(CUR_PAGE);
+  if (!pg) return;
+  if (markIds(pg.marks).sort().join(',') === pageKeyShown) {
+    paintMarksChips({ isMain: false, pg: pg, marks: pg.marks });
+    return;
+  }
+  renderPage();
+}
+function renderPageList(){
+  const box = document.getElementById('pageList');
+  document.getElementById('pageCount').textContent = PAGES.length + ' 个';
+  box.innerHTML = '';
+  const rows = [{ id: 'main', name: '全景图', n: st.total, on: CUR_PAGE === 'main' }].concat(
+    PAGES.map(function(p){
+      return { id: p.id, name: p.name, n: markIds(p.marks).length, pg: p, on: CUR_PAGE === p.id };
+    })
+  );
+  rows.forEach(function(r){
+    const d = document.createElement('div');
+    d.className = 'pagerow' + (r.on ? ' on' : '');
+    const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = r.name;
+    const ct = document.createElement('span'); ct.className = 'ct'; ct.textContent = r.n + ' 张';
+    d.appendChild(nm); d.appendChild(ct);
+    if (r.pg) {
+      const x = document.createElement('button');
+      x.className = 'x'; x.textContent = '×'; x.title = '删除这个对齐页（不影响卡片上的高亮）';
+      x.addEventListener('click', function(e){ e.stopPropagation(); delPage(r.pg.id); });
+      d.appendChild(x);
+      d.title = '单击切换；双击重命名';
+      d.addEventListener('dblclick', function(e){ e.stopPropagation(); renameInline(nm, r); });
+    } else {
+      d.title = '全景图（默认页）';
+    }
+    d.addEventListener('click', function(){ if (CUR_PAGE !== r.id) setPage(r.id); });
+    box.appendChild(d);
+  });
+}
+function renameInline(nm, r){
+  const inp = document.createElement('input');
+  inp.value = r.pg.name;
+  nm.replaceWith(inp);
+  inp.focus(); inp.select();
+  let closed = false;
+  function done(ok){
+    if (closed) return;
+    closed = true;
+    const v = (inp.value || '').trim().slice(0, 60);
+    if (ok && v) {
+      r.pg.name = v;
+      if (CUR_PAGE === r.pg.id) {
+        const h = document.getElementById('phName');
+        if (h) h.textContent = v;
+        const it = IDMAP['pgroot'];
+        if (it) { const t = it.el.querySelector('.tt'); if (t) t.textContent = v; }
+      }
+      saveNow(true);
+      flash('已改名为「' + v + '」');
+    }
+    renderPageList();
+  }
+  inp.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') { e.preventDefault(); done(true); }
+    else if (e.key === 'Escape') { done(false); }
+  });
+  inp.addEventListener('blur', function(){ done(true); });
+}
+function delPage(id){
+  const pg = pageById(id);
+  if (!pg) return;
+  if (!confirm('删除对齐页「' + pg.name + '」？\n卡片上的高亮标记不会删掉，可以再重新生成。')) return;
+  PAGES = PAGES.filter(function(p){ return p.id !== id; });
+  if (CUR_PAGE === id) CUR_PAGE = 'main';
+  renderPage();
+  saveNow(true);
+  flash('已删除该对齐页');
+}
+function setPage(id){
+  if (id !== 'main' && !pageById(id)) id = 'main';
+  CUR_PAGE = id;
+  renderPage();
+  saveSoon();
+}
+function newPageFromHL(){
+  const ids = Object.keys(HL).filter(function(id){ return ALLNODE[id] && MARKS[HL[id]]; });
+  if (!ids.length) { flash('先在卡片上标高亮，再生成对齐页', false); return; }
+  const marks = [];
+  MARKS.forEach(function(m, i){
+    if (ids.some(function(id){ return HL[id] === i; })) marks.push(i);
+  });
+  const label = marks.map(function(i){ return MARKS[i].k; }).join(' + ');
+  const pg = {
+    id: 'p' + Date.now().toString(36),
+    name: label + ' · ' + ids.length + ' 张卡片',
+    desc: '',
+    marks: marks
+  };
+  PAGES.push(pg);
+  setPage(pg.id);
+  flash('已生成对齐页「' + pg.name + '」，标题和说明直接点开就能改', true);
+}
+document.getElementById('btnNewPage').addEventListener('click', newPageFromHL);
+
+/* 对齐页标题条：直接改名 / 写说明 */
+document.getElementById('phName').addEventListener('input', function(){
+  const pg = pageById(CUR_PAGE); if (!pg) return;
+  pg.name = (this.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 60) || '未命名对齐页';
+  const it = IDMAP['pgroot'];
+  if (it) { const t = it.el.querySelector('.tt'); if (t) t.textContent = pg.name; }
+  renderPageList();
+  saveSoon();
+});
+document.getElementById('phName').addEventListener('blur', function(){
+  const pg = pageById(CUR_PAGE); if (!pg) return;
+  this.textContent = pg.name;
+  saveNow(true);
+});
+document.getElementById('phName').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') { e.preventDefault(); this.blur(); }
+});
+document.getElementById('phDesc').addEventListener('input', function(){
+  const pg = pageById(CUR_PAGE); if (!pg) return;
+  pg.desc = (this.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 200);
+  saveSoon();
+});
+document.getElementById('phDesc').addEventListener('blur', function(){
+  const pg = pageById(CUR_PAGE); if (!pg) return;
+  this.textContent = pg.desc;
+  saveNow(true);
+});
+
+/* ---------- 初始化 ---------- */
+(function boot(){
+  loadStore();
+  if (pendingZoom != null && Math.abs(pendingZoom - 1) > 0.001) zoom = pendingZoom;
+  if (CUR_PAGE !== 'main' && !pageById(CUR_PAGE)) CUR_PAGE = 'main';
+  renderPage();
+  if (!STORE_OK) showWarn();
+})();
+</script>
+
+
+</body>
+</html>
