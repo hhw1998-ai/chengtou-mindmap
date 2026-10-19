@@ -2,7 +2,8 @@
 
 把「城投 → 产投」转型的研究框架做成一张可交互的思维导图单页应用。
 
-- **在线访问**：<https://hv892cc3j7.coze.site/>
+- **在线访问（GitHub Pages）**：<https://hhw1998-ai.github.io/chengtou-mindmap/>
+- 扣子生产站点（原始部署）：<https://hv892cc3j7.coze.site/>
 - **数据规模**：1 个根节点 + 6 条主线 + 16 个模块 + 387 个研究问题，共 523 个节点，最深 4 层
 - **形态**：原生静态单页（native-static），无构建步骤、无前端依赖，全部资源自包含在一个 `index.html` 中
 
