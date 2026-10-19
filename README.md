@@ -58,7 +58,7 @@ Supabase（免费版）
 ├── js/
 │   ├── cloud-sync.js       # 多人标注同步层（身份/读写/实时/迁移/UI 覆盖）
 │   └── mm-config.js        # Supabase 项目 URL + anon key
-├── vendor/
+├── lib/
 │   └── supabase.js         # supabase-js v2 UMD 包（自托管）
 ├── styles/
 │   ├── main.css            # 模板遗留样式（未引用）
