@@ -8,9 +8,8 @@
 
 ## 获取方式（2026-10-19）
 1. 登录扣子账号后进入项目预览页。
-2. 预览 iframe 指向开发沙箱站点：
-   `https://5a1277fc-9904-4983-afdb-eac9ea2ea4d1-5000.dev.coze.site/`
-   （python http.server 直接服务项目根目录，且开启了目录列表）
+2. 预览 iframe 指向项目的开发沙箱站点（`*.dev.coze.site` 域名，python http.server
+   直接服务项目根目录，且开启了目录列表）
 3. 从该站点下载项目自带的源码包：
    - `/public/mindmap-project.tar.gz`（63,715 字节）
    - `/public/mindmap-project.b64.txt`（同一文件的 base64 版，86,074 字节）
@@ -39,5 +38,6 @@
 - 数据：1 个根节点 + 6 条主线 + 16 个模块 + 387 个研究问题，共 523 个节点，最大层级 4 层。
 
 ## 本仓库
-- 仓库：`hhw1998-ai/chengtou-mindmap`（私有）
+- 仓库：`hhw1998-ai/chengtou-mindmap`（公开，用于 GitHub Pages 免费托管）
+- 线上地址：<https://hhw1998-ai.github.io/chengtou-mindmap/>
 - 内容：上述源码快照（6 个原始文件）+ `README.md` + `docs/screenshot.png`（线上界面截图）
